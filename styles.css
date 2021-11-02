@@ -12,6 +12,10 @@ main {
     margin: 2% 2% 2% 2%;
 }
 
+.row {
+    width: 100%;
+}
+
 body .canvas {
     
     position: relative;
@@ -19,6 +23,7 @@ body .canvas {
     transform: translateY(-50%);
     display: flex;
     justify-content: center;
+    align-items: center;
     width: 100%;
     
 }
@@ -31,4 +36,84 @@ body .canvas {
 
 #startMenu {
     position: absolute;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    width: 20vh;
+    padding-top: 15%;
+    opacity: 0;
+
+    -webkit-animation: fadeIn 2s ease 1s;
+       -moz-animation: fadeIn 2s ease 1s;
+        -ms-animation: fadeIn 2s ease 1s;
+         -o-animation: fadeIn 2s ease 1s;
+            animation: fadeIn 2s ease 1s;
+            
+
 }
+
+.btn {
+    margin-bottom: 20%;
+}
+
+
+/*   FADE IN ANIMATIONS FOR DIFFERENT BROWSERS   */
+
+@keyframes fadeIn {
+    from { opacity:0; }
+    to { opacity:1; }
+}
+
+@-webkit-keyframes fadeIn {
+    from { opacity:0; }
+    to { opacity:1;}
+}
+
+@-moz-keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@-o-keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@-ms-keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+
+
+
+/*   FADE OUT ANIMATIONS FOR DIFFERENT BROWSERS   */
+
+@keyframes fadeOut {
+    from { opacity:1; }
+    to { opacity:0; }
+}
+
+@-webkit-keyframes fadeOut {
+    from { opacity:1; }
+    to { opacity:0;}
+}
+
+@-moz-keyframes fadeOut {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+}
+
+@-o-keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+@-ms-keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+
+
