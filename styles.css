@@ -1,38 +1,53 @@
+
+html { 
+  width: 100%;
+  height: 100%;
+  font-family: "Montserrat", sans-serif;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+
 body {
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-color: rgb(245,245,245);
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  
 }   
 
 main {
-    height: 90vh;
-    display: flex;
-    justify-content: center;
-    margin: 2% 2% 2% 2%;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.row {
-    width: 100%;
-}
 
 body .canvas {
     
     position: relative;
-    top: 50%;
     transform: translateY(-50%);
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
     
+    
 }
 
-#canvas {
-    width: 100%;
-    height: 100%;
-    background-color: black;
+
+.canvasContainer {
+  width: 100%;
+  height: 100%;
 }
+
 
 #startMenu {
     position: absolute;
@@ -40,22 +55,119 @@ body .canvas {
     padding: 0;
     display: flex;
     flex-direction: column;
-    width: 20vh;
-    padding-top: 15%;
-    opacity: 0;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff10;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
 
-    -webkit-animation: fadeIn 2s ease 1s;
-       -moz-animation: fadeIn 2s ease 1s;
-        -ms-animation: fadeIn 2s ease 1s;
-         -o-animation: fadeIn 2s ease 1s;
-            animation: fadeIn 2s ease 1s;
+    -webkit-animation: fadeIn 5s ease;
+       -moz-animation: fadeIn 5s ease;
+        -ms-animation: fadeIn 5s ease;
+         -o-animation: fadeIn 5s ease;
+            animation: fadeIn 5s ease;
             
 
 }
 
+#startMenu>div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .btn {
     margin-bottom: 20%;
+    width: 100%;
+    transition: 0.25s;
+    background: none;
 }
+  
+  
+  h4 {
+    font-weight: 400;
+    text-transform: uppercase;
+    font-size: 20px;
+  }
+
+  .firstContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 20%;
+  }
+  
+  .container {
+    overflow: hidden;
+    position: relative;
+    padding-bottom:30px;
+  }
+  
+  .btn {
+    height: 60px;
+    width: 150px;
+    display: flex;
+    
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.8s ease;
+    position: relative;
+    border: 1px solid rgb(237, 192, 255);
+    background-color: #500243;
+    margin: 0 40px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+    overflow: hidden;
+    transition: all 300ms ease;
+  }
+  
+  .btn::before,
+  .btn::after {
+    position: absolute;
+    display: block;
+    content: "";
+    width: 100%;
+    height: 100%;
+  }
+  
+  .btn h4 {
+    color: #fff;
+  }
+  
+  .btn:after {
+    width: 300%;
+    height: 300%;
+    left: -300%;
+    transform: rotate(45deg);
+    background-color: rgb(237, 192, 255);
+    transition: all 300ms ease;
+  }
+  
+  .btn:hover h4 {
+    color: #500243;
+    z-index: 10;
+    font-weight: 600;
+  }
+  
+  .btn:hover::after {
+    left: -100%;
+  }
+  
+  .btn:hover {
+    border: 2px solid #500243;
+    transform: translateX(10px);
+
+  }
+
+  .btn:active {
+    transform: scale(80%);
+  }
+    
+  
+
+
 
 
 /*   FADE IN ANIMATIONS FOR DIFFERENT BROWSERS   */
@@ -86,34 +198,6 @@ body .canvas {
 }
 
 
-
-
-/*   FADE OUT ANIMATIONS FOR DIFFERENT BROWSERS   */
-
-@keyframes fadeOut {
-    from { opacity:1; }
-    to { opacity:0; }
-}
-
-@-webkit-keyframes fadeOut {
-    from { opacity:1; }
-    to { opacity:0;}
-}
-
-@-moz-keyframes fadeOut {
-    from { opacity: 1; }
-    to   { opacity: 0; }
-}
-
-@-o-keyframes fadeOut {
-    from { opacity: 1; }
-    to { opacity: 0; }
-}
-
-@-ms-keyframes fadeOut {
-    from { opacity: 1; }
-    to { opacity: 0; }
-}
 
 
 
