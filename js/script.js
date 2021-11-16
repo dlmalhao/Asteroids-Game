@@ -14,7 +14,7 @@ let startButton = document.querySelector("#startButton")
 
 canvas.width = window.innerWidth
 canvas.height = window.innerHeight
-drawBackground()
+
 
 // window.addEventListener("resize", function() {
 //     canvas.width = window.innerWidth
@@ -24,25 +24,34 @@ drawBackground()
 // })
 
 
-
+background.onload = function() {
+    ctx.drawImage(background,0,0)
+}
 
 startButton.onclick = function() {
     fadeOut(startMenu)
 }
 
 
+window.addEventListener("resize", function () {
+    canvas.width = window.innerWidth
+    canvas.height = window.innerHeight
+
+    ctx.drawImage(background,0,0)
+    // drawBackground()
+})
 
 
-//Functions
 
 
-function drawBackground () {
 
-    background.onload = function() {
-        ctx.drawImage(background,0,0)
-    }
 
-}
+
+                                                                //Functions
+
+
+
+
 
 
 function fadeOut(element) {
@@ -81,6 +90,14 @@ function start() {
 function quit() {
     window.close()
 }
+
+
+
+
+
+
+
+                                                                //Classes
 
 
 class nave {
