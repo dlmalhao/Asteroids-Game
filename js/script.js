@@ -133,7 +133,78 @@ function drawAsteroid () {
     }
 }
 
+//Create Ship 
 
+let ship = {
+    img: new Image(),
+    src: "./img/naveSemFogo.png",
+    size:100,
+    velocity: 2,
+    angle: 0,
+    isMoving:false,
+    isTurningLeft:false,
+    isTurningRigth:false,
+    coordinates: {
+        x: canvas.width/2,
+        y: canvas.height/2,
+    },
+}
+
+
+//Draw Ship
+
+function drawShip(){
+    
+    ctx.save();
+    ctx.translate(ship.coordinates.x ,ship.coordinates.y)
+    ctx.rotate(ship.angle)
+    ship.img.src= ship.src
+    ctx.drawImage(ship.img, -ship.size/2, -ship.size/2, ship.size, ship.size)
+    ctx.restore();
+
+    if(ship.isMoving){
+        ship.coordinates.y+= ship.velocity * Math.sin(ship.angle)
+        ship.coordinates.x+= ship.velocity * Math.cos(ship.angle)
+    }
+    if(ship.isTurningLeft){
+        ship.angle -=0.1
+        console.log(ship.angle);
+    }
+    if(ship.isTurningRigth){
+        ship.angle +=0.1
+    }
+}
+
+function KeyPressed(e){
+    if(e.key == "w"){
+        
+        ship.isMoving = true;
+    }
+
+    if(e.key == "a"){
+        ship.isTurningLeft = true;
+        
+    }
+    if(e.key == "d"){
+        ship.isTurningRigth = true;
+    }
+}
+
+function KeyReleased(e){
+    if(e.key == "w"){
+        ship.isMoving =false;
+    }
+
+    if(e.key == "a"){
+        ship.isTurningLeft = false;
+    }
+    if(e.key == "d"){
+        ship.isTurningRigth = false;
+    }
+}
+
+window.addEventListener('keydown', KeyPressed);
+window.addEventListener('keyup', KeyReleased)
 
 //Script direção aleatória para os asteroids
 function randomDirection(min,max) {
@@ -159,6 +230,9 @@ function render() {
 
     //Desenhar asteroids
     drawAsteroid()
+
+    //Desenhar nave
+    drawShip()
 
     //Colocar o high score
     setHighScore()
