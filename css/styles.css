@@ -208,6 +208,129 @@ body .canvas {
   
 
 
+  
+.initialAnimation {
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  position: absolute;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.nave {
+  width: 240px;
+  position: absolute;
+}
+
+.font {
+  font-family: 'VCR OSD MONO';
+  font-size: 60px;
+  font-weight: bold;
+  color: white;
+  position: absolute;
+  top: 25%;
+}
+
+.focus-in-expand {
+  -webkit-animation: focus-in-expand 0.8s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+  animation: focus-in-expand 1.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+}
+
+.slide-in-bottom {
+  -webkit-animation: slide-in-bottom 2s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+  animation: slide-in-bottom 2s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+}
+
+/* .floating {
+  animation: floating 5s ease-in-out 15s infinite normal forwards;
+}
+
+@keyframes myAnim {
+  0% {
+    transform: translate(0);
+  }
+
+  20% {
+    transform: translate(-2px, 2px);
+  }
+
+  40% {
+    transform: translate(-2px, -2px);
+  }
+
+  60% {
+    transform: translate(2px, 2px);
+  }
+
+  80% {
+    transform: translate(2px, -2px);
+  }
+
+  100% {
+    transform: translate(0);
+  }
+} */
+
+@-webkit-keyframes slide-in-bottom {
+  0% {
+      -webkit-transform: translateY(1000px);
+      transform: translateY(1000px);
+      opacity: 0;
+  }
+
+  100% {
+      -webkit-transform: translateY(100px);
+      transform: translateY(100px);
+      opacity: 1;
+  }
+}
+
+@keyframes slide-in-bottom {
+  0% {
+      -webkit-transform: translateY(1000px);
+      transform: translateY(1000px);
+      opacity: 0;
+  }
+
+  100% {
+      -webkit-transform: translateY(0px);
+      transform: translateY(5px);
+      opacity: 1;
+  }
+}
+
+@-webkit-keyframes focus-in-expand {
+  0% {
+      letter-spacing: -0.5em;
+      -webkit-filter: blur(12px);
+      filter: blur(12px);
+      opacity: 0;
+  }
+
+  100% {
+      -webkit-filter: blur(0px);
+      filter: blur(0px);
+      opacity: 1;
+  }
+}
+
+@keyframes focus-in-expand {
+  0% {
+      letter-spacing: -0.5em;
+      -webkit-filter: blur(12px);
+      filter: blur(12px);
+      opacity: 0;
+  }
+
+  100% {
+      -webkit-filter: blur(0px);
+      filter: blur(0px);
+      opacity: 1;
+  }
+}
 
 
 /*   FADE IN ANIMATIONS FOR DIFFERENT BROWSERS   */

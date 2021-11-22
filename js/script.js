@@ -54,6 +54,7 @@ function fadeOut(element) {
         if (op <= 0.1){
             clearInterval(timer);
             element.style.display = 'none';
+            document.querySelector(".initialAnimation").style.visibility = "hidden"
             createAsteroid(6)
             render()
         }
@@ -137,9 +138,8 @@ function drawAsteroid () {
 
 let ship = {
     img: new Image(),
-    src: "./img/naveSemFogo.png",
     size:100,
-    velocity: 2,
+    velocity: 3,
     angle: 0,
     isMoving:false,
     isTurningLeft:false,
@@ -149,6 +149,7 @@ let ship = {
         y: canvas.height/2,
     },
 }
+ship.img.src= "./img/naveSemFogo.png"
 
 
 //Draw Ship
@@ -158,13 +159,13 @@ function drawShip(){
     ctx.save();
     ctx.translate(ship.coordinates.x ,ship.coordinates.y)
     ctx.rotate(ship.angle)
-    ship.img.src= ship.src
     ctx.drawImage(ship.img, -ship.size/2, -ship.size/2, ship.size, ship.size)
     ctx.restore();
 
     if(ship.isMoving){
-        ship.coordinates.y+= ship.velocity * Math.sin(ship.angle)
-        ship.coordinates.x+= ship.velocity * Math.cos(ship.angle)
+        ship.img.src = "./img/nave.png"
+        ship.coordinates.y+= ship.velocity * Math.sin(ship.angle - Math.PI/2)
+        ship.coordinates.x+= ship.velocity * Math.cos(ship.angle - Math.PI/2)
     }
     if(ship.isTurningLeft){
         ship.angle -=0.1
@@ -192,6 +193,7 @@ function KeyPressed(e){
 
 function KeyReleased(e){
     if(e.key == "w"){
+        ship.img.src= "./img/naveSemFogo.png"
         ship.isMoving =false;
     }
 
