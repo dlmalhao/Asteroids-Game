@@ -54,7 +54,7 @@ function fadeOut(element) {
         if (op <= 0.1){
             clearInterval(timer);
             element.style.display = 'none';
-            // createAsteroid(6)
+            createAsteroid(6)
             render()
         }
         element.style.opacity = op;
@@ -132,6 +132,8 @@ function drawAsteroid () {
         }
     }
 }
+
+
 
 //Script direção aleatória para os asteroids
 function randomDirection(min,max) {
