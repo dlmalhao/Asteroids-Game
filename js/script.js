@@ -14,6 +14,7 @@ let score = 0
 let asteroids = []
 let sizes = [200,150,100]
 let urls = ["./img/asteroid.png","./img/asteroid2.png"]
+let bullets = []
 
 canvas.width = window.innerWidth
 canvas.height = window.innerHeight
@@ -35,9 +36,6 @@ startButton.onclick = function() {
 window.addEventListener("resize", function () {
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
-
-    
-    render()
 })
 
 
@@ -56,6 +54,15 @@ function fadeOut(element) {
             element.style.display = 'none';
             document.querySelector(".initialAnimation").style.visibility = "hidden"
             createAsteroid(6)
+            //Colocar o high score
+            setHighScore()
+
+            //Colocar as vidas
+            document.querySelector("#livesValue").innerHTML = "Lives: " + lives
+
+            //Colocar o score
+            document.querySelector("#scoreValue").innerHTML = "Score: " + score
+
             render()
         }
         element.style.opacity = op;
@@ -65,7 +72,7 @@ function fadeOut(element) {
 }
 
 
-//Create Asteroid
+//Criação dos asteroids
 function createAsteroid (num) {
     for(let i = 0; i < num; i++) {
         const rndSize = sizes[Math.floor(Math.random() * sizes.length)] 
@@ -91,7 +98,7 @@ function createAsteroid (num) {
 }
 
 
-//Draw Asteroid
+//Desenho dos asteroids
 function drawAsteroid () {
     for (const asteroid of asteroids) {
         ctx.save()
@@ -134,7 +141,7 @@ function drawAsteroid () {
     }
 }
 
-//Create Ship 
+//Criar a nave
 
 let ship = {
     img: new Image(),
@@ -148,11 +155,13 @@ let ship = {
         x: canvas.width/2,
         y: canvas.height/2,
     },
+    isShooting: false
 }
 ship.img.src= "./img/naveSemFogo.png"
 
 
-//Draw Ship
+
+//Desenhar a nave
 
 function drawShip(){
     
@@ -169,12 +178,78 @@ function drawShip(){
     }
     if(ship.isTurningLeft){
         ship.angle -=0.1
-        console.log(ship.angle);
     }
     if(ship.isTurningRigth){
         ship.angle +=0.1
     }
+
+    //Verificação das bordas
+    if(ship.coordinates.x >= canvas.width + (ship.size / 2)) {
+        ship.coordinates.x = -(ship.size/2)
+    }
+    if(ship.coordinates.y >= canvas.height + (ship.size / 2)) {
+        ship.coordinates.y = -(ship.size/2)
+    }
+    if(ship.coordinates.x < -(ship.size/2)) {
+        ship.coordinates.x = canvas.width + (ship.size / 2)
+    }
+    if(ship.coordinates.y < -(ship.size/2)) {
+        ship.coordinates.y = canvas.height + (ship.size / 2)
+    }
 }
+
+
+
+//Objeto das balas disparadas pela nave
+// let bullet = {
+//     img: new Image(),
+//     src: "./img/tiro.png",
+//     velocity: 2,
+//     coordinates: {
+//         x: 0,
+//         y: 0
+//     },
+//     angle: 0,
+//     isShooting : false
+// }
+
+
+
+function shoot() {
+    if(ship.isShooting) {
+        bullets.push({
+            img: new Image(),
+            src: "./img/tiro.png",
+            velocity: 2,
+            size: 30,
+            coordinates: {
+                x: ship.coordinates.x,
+                y: ship.coordinates.y - 50
+            },
+            angle: ship.angle,
+        })
+        drawBullets()
+    }
+    ship.isShooting = false
+}
+
+
+
+//Desenhar as balas
+function drawBullets() {
+    for(let i = 0; i < bullets.length; i++) {
+        
+        bullets[i].img.src = bullets[i].src
+        ctx.drawImage(bullets[i].img, bullets[i].coordinates.x * bullets[i].angle, bullets[i].coordinates.y *bullets[i].angles, bullets[i].size, bullets[i].size)
+        
+
+        // bullets[i].coordinates.x += bullets[i].velocity * Math.cos(bullets[i].angle )
+        bullets[i].coordinates.y -- //bullets[i].velocity * Math.sin(bullets[i].angle )
+        console.log(bullets[i]);
+        // bullets.splice(i, 1)
+    }
+}
+
 
 function KeyPressed(e){
     if(e.key == "w"){
@@ -189,6 +264,10 @@ function KeyPressed(e){
     if(e.key == "d"){
         ship.isTurningRigth = true;
     }
+
+    if(e.keyCode == 32){
+        shoot()
+    }
 }
 
 function KeyReleased(e){
@@ -200,9 +279,16 @@ function KeyReleased(e){
     if(e.key == "a"){
         ship.isTurningLeft = false;
     }
+
     if(e.key == "d"){
         ship.isTurningRigth = false;
     }
+
+    if(e.keyCode == 32){
+        ship.isShooting = true
+    }
+
+
 }
 
 window.addEventListener('keydown', KeyPressed);
@@ -236,14 +322,11 @@ function render() {
     //Desenhar nave
     drawShip()
 
-    //Colocar o high score
-    setHighScore()
+    //Desenhar
+    drawBullets()
 
-    //Colocar as vidas
-    document.querySelector("#livesValue").innerHTML = "Lives: " + lives
-
-    //Colocar o score
-    document.querySelector("#scoreValue").innerHTML = "Score: " + score
+    //Desenhar as balas
+    
         
     requestAnimationFrame(render)
 
@@ -253,25 +336,5 @@ function render() {
 function quit() {
     window.close()
 }
-
-
-
-
-
-
-
-//Classes
-
-
-// class ship {
-//     constructor (source, velocity, coordinates, rotateAngle) {
-//         this.source = source,
-//         this.velocity = velocity,
-//         this.coordinates = coordinates,
-//         this.rotateAngle = rotateAngle
-//     }
-// } 
-
-
 
 
