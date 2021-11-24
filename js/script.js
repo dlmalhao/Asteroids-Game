@@ -176,9 +176,11 @@ function drawShip(){
         ship.coordinates.y+= ship.velocity * Math.sin(ship.angle - Math.PI/2)
         ship.coordinates.x+= ship.velocity * Math.cos(ship.angle - Math.PI/2)
     }
+
     if(ship.isTurningLeft){
         ship.angle -=0.1
     }
+
     if(ship.isTurningRigth){
         ship.angle +=0.1
     }
@@ -217,14 +219,15 @@ function drawShip(){
 
 function shoot() {
     if(ship.isShooting) {
+        console.log("hey")
         bullets.push({
             img: new Image(),
             src: "./img/tiro.png",
             velocity: 2,
             size: 30,
             coordinates: {
-                x: ship.coordinates.x,
-                y: ship.coordinates.y - 50
+                x: ship.coordinates.x ,
+                y: ship.coordinates.y
             },
             angle: ship.angle,
         })
@@ -238,20 +241,46 @@ function shoot() {
 //Desenhar as balas
 function drawBullets() {
     for(let i = 0; i < bullets.length; i++) {
-        
         bullets[i].img.src = bullets[i].src
-        ctx.drawImage(bullets[i].img, bullets[i].coordinates.x * bullets[i].angle, bullets[i].coordinates.y *bullets[i].angles, bullets[i].size, bullets[i].size)
-        
+        ctx.save()
+        ctx.translate(bullets[i].coordinates.x, bullets[i].coordinates.y)
+        ctx.rotate(bullets[i].angle)
+        ctx.drawImage(bullets[i].img, -bullets[i].size / 2, -ship.size / 2, bullets[i].size, bullets[i].size)
+        bullets[i].coordinates.y += bullets[i].velocity * Math.sin(bullets[i].angle - Math.PI /2)
+        bullets[i].coordinates.x += bullets[i].velocity * Math.cos(bullets[i].angle - Math.PI / 2)
+        ctx.restore()
 
-        // bullets[i].coordinates.x += bullets[i].velocity * Math.cos(bullets[i].angle )
-        bullets[i].coordinates.y -- //bullets[i].velocity * Math.sin(bullets[i].angle )
-        console.log(bullets[i]);
-        // bullets.splice(i, 1)
+        ctx.closePath()
+
+
+
+
+
+        //////////////////////// TEMPORARIO /////////////////////////
+        if(bullets.length > 0) {
+            if(bullets[i].coordinates.x >= canvas.width + (bullets[i].size / 2)) {
+                bullets.splice(i, 1)
+            }
+            if(bullets[i].coordinates.y >= bullets[i].height + (bullets[i].size / 2)) {
+                bullets.splice(i, 1)
+            }
+            if(bullets[i].coordinates.x < -(bullets[i].size/2)) {
+                bullets.splice(i, 1)
+            }
+            if(bullets[i].coordinates.y < -(bullets[i].size/2)) {
+                bullets.splice(i, 1)
+            }
+        }
     }
 }
 
 
 function KeyPressed(e){
+    if(e.keyCode == 32){
+        ship.isShooting = true
+        shoot()
+    }
+
     if(e.key == "w"){
         
         ship.isMoving = true;
@@ -265,9 +294,7 @@ function KeyPressed(e){
         ship.isTurningRigth = true;
     }
 
-    if(e.keyCode == 32){
-        shoot()
-    }
+    
 }
 
 function KeyReleased(e){
@@ -285,10 +312,8 @@ function KeyReleased(e){
     }
 
     if(e.keyCode == 32){
-        ship.isShooting = true
+        ship.isShooting = false
     }
-
-
 }
 
 window.addEventListener('keydown', KeyPressed);
@@ -310,6 +335,10 @@ function setHighScore () {
 
 //render
 function render() {
+    if(bullets.length > 0) {
+        console.log(bullets[0].coordinates);
+    }
+    
     //Limpar o canvas
     ctx.clearRect(0,0, canvas.width, canvas.height)
     
