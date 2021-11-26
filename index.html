@@ -8,7 +8,7 @@
     <title>Asteroids Game</title>
 </head>
 <body>
-    <main>
+    <main class="main">
         <div class="canvasContainer">
             <!-- <embed src="img/fundo.svg" alt="" id="background"> -->
             <canvas id="canvas" style="background-color: rgb(132, 69, 143);"> Your browser does not support HTML5 Canvas.</canvas>
@@ -39,25 +39,52 @@
                 </div>
                 <div class="container">
                     <div class="block">
-                     <div class="btn" id="optionsButton">
-                         <h4>Options</h4>
-                     </div>
-                 </div>
+                        <div class="btn" id="optionsButton">
+                            <h4>Options</h4>
+                        </div>
+                    </div>
                 </div>
                 <div class="container">
-                <div class="block">
-                    <div class="btn btn2" id="quitButton" onclick="quit()">
-                        <h4>Quit</h4>
-                     </div>
+                    <div class="block">
+                        <div class="btn btn2" id="quitButton" onclick="quit()">
+                            <h4>Quit</h4>
+                        </div>
+                    </div>
                 </div>
-            </div>
             </div>
             
             
         </menu>
-            
-        
+        <div class="gameOver">
+            <img src="./img/gameover.png" alt="">
+            <div class="firstContainer">
+                <div class="container">
+                    <div class="block">
+                        <div class="btn" id="tryAgainButton" onclick="startAgain()">
+                            <h4>Try Again</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="container">
+                    <div class="block">
+                        <div class="btn" id="optionsButton" onclick="reload()">
+                            <h4>Go to Menu</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="container">
+                    <div class="block">
+                        <div class="btn btn2" id="quitButton2" onclick="quit()">
+                            <h4>Quit</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
+
+    
+
     <script src="js/script.js"></script>
 </body>
 </html>

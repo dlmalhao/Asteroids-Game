@@ -8,13 +8,18 @@ let width = canvas.width
 let height = canvas.height
 let startMenu = document.querySelector("#startMenu")
 let startButton = document.querySelector("#startButton")
-let highScore = 0
+let highScore = getHighScore()
 let lives = 3
 let score = 0
 let asteroids = []
 let sizes = [200,150,100]
 let urls = ["./img/asteroid.png","./img/asteroid2.png"]
 let bullets = []
+let isGameOver = false
+let isStartingAgain = false
+let rndX, rndY, rndSize, rndImg, rndVelocity
+
+
 
 canvas.width = window.innerWidth
 canvas.height = window.innerHeight
@@ -45,6 +50,12 @@ window.addEventListener("resize", function () {
 //Functions
 
 
+
+//return do valor do highScore
+function getHighScore() {
+    return localStorage.getItem("HighScore")
+}
+
 //Fade Out
 function fadeOut(element) {
     var op = 1;  // initial opacity
@@ -53,16 +64,7 @@ function fadeOut(element) {
             clearInterval(timer);
             element.style.display = 'none';
             document.querySelector(".initialAnimation").style.visibility = "hidden"
-            createAsteroid(6)
-            //Colocar o high score
-            setHighScore()
-
-            //Colocar as vidas
-            document.querySelector("#livesValue").innerHTML = "Lives: " + lives
-
-            //Colocar o score
-            document.querySelector("#scoreValue").innerHTML = "Score: " + score
-
+            
             render()
         }
         element.style.opacity = op;
@@ -74,11 +76,39 @@ function fadeOut(element) {
 
 //Criação dos asteroids
 function createAsteroid (num) {
-    for(let i = 0; i < num; i++) {
-        const rndSize = sizes[Math.floor(Math.random() * sizes.length)] 
-        const rndImg = urls[Math.floor(Math.random()* urls.length)]
-        const rndVelocity = sizes.findIndex(size => size == rndSize) + 1
-        console.log(rndImg);
+    if(asteroids.length == 0) {
+        for(let i = 0; i < num; i++) {
+            rndX = getRandomX()
+            rndY = getRandomY()
+            rndSize = sizes[Math.floor(Math.random() * sizes.length)] 
+            rndImg = urls[Math.floor(Math.random()* urls.length)]
+            rndVelocity = sizes.findIndex(size => size == rndSize) + 2
+            if (distanceBetweenTwoPoints(rndX, rndY, ship.coordinates.x, ship.coordinates.y) > 300) {
+                asteroids.push({
+                    img: new Image(),
+                    src: rndImg,
+                    size: rndSize,
+                    velocity: rndVelocity,
+                    direction: {
+                        x: randomDirection(-1,1),
+                        y: randomDirection(-1,1)
+                    },
+                    coordinates: {
+                        x: rndX,
+                        y: rndY
+                    },
+                    angle: 0
+                })
+            } 
+        }
+    }
+
+    else {
+        rndX = getRandomX()
+        rndY = getRandomY()
+    }
+    
+    if (asteroids.length < num) {
         asteroids.push({
             img: new Image(),
             src: rndImg,
@@ -89,8 +119,8 @@ function createAsteroid (num) {
                 y: randomDirection(-1,1)
             },
             coordinates: {
-                x: Math.random() * (canvas.width - rndSize),
-                y: Math.random() * (canvas.height - rndSize)
+                x: rndX,
+                y: rndY
             },
             angle: 0
         })
@@ -101,6 +131,9 @@ function createAsteroid (num) {
 //Desenho dos asteroids
 function drawAsteroid () {
     for (const asteroid of asteroids) {
+        if(distanceBetweenTwoPoints(asteroid.coordinates.x, asteroid.coordinates.y, ship.coordinates.x, ship.coordinates.y) < 300) {
+
+        }
         ctx.save()
         ctx.translate(asteroid.coordinates.x, asteroid.coordinates.y)
         ctx.rotate(asteroid.angle * Math.PI / 500)
@@ -109,18 +142,11 @@ function drawAsteroid () {
         ctx.restore()
 
         asteroid.angle ++
-        if(asteroid.velocity == 1) {
-            asteroid.coordinates.x += asteroid.direction.x 
-            asteroid.coordinates.y += asteroid.direction.y 
-        }
-        if(asteroid.velocity == 2) {
-            asteroid.coordinates.x += asteroid.direction.x * 1.5
-            asteroid.coordinates.y += asteroid.direction.y * 1.5
-        }
-        if(asteroid.velocity == 3) {
-            asteroid.coordinates.x += asteroid.direction.x * 2
-            asteroid.coordinates.y += asteroid.direction.y * 2
-        }
+
+        asteroid.coordinates.x += asteroid.direction.x * (asteroid.velocity/2)
+        asteroid.coordinates.y += asteroid.direction.y * (asteroid.velocity/2)
+       
+        
         
         
         
@@ -146,7 +172,8 @@ function drawAsteroid () {
 let ship = {
     img: new Image(),
     size:100,
-    velocity: 3,
+    velocity: 0,
+    maxVelocity: 6,
     angle: 0,
     isMoving:false,
     isTurningLeft:false,
@@ -173,8 +200,30 @@ function drawShip(){
 
     if(ship.isMoving){
         ship.img.src = "./img/nave.png"
-        ship.coordinates.y+= ship.velocity * Math.sin(ship.angle - Math.PI/2)
-        ship.coordinates.x+= ship.velocity * Math.cos(ship.angle - Math.PI/2)
+        if(ship.velocity < ship.maxVelocity) {
+            ship.velocity += 0.1
+            ship.coordinates.y+= ship.velocity * Math.sin(ship.angle - Math.PI/2)
+            ship.coordinates.x+= ship.velocity * Math.cos(ship.angle - Math.PI/2)
+        }
+        else{
+            ship.velocity = ship.maxVelocity
+            ship.coordinates.y+= ship.velocity * Math.sin(ship.angle - Math.PI/2)
+            ship.coordinates.x+= ship.velocity * Math.cos(ship.angle - Math.PI/2)
+        }
+    }
+    else{
+        if(ship.velocity == 0) {
+            ship.velocity = 0
+        }
+
+        if(ship.velocity > 0) {
+            ship.velocity -= 0.05
+            ship.coordinates.y+= ship.velocity * Math.sin(ship.angle - Math.PI/2)
+            ship.coordinates.x+= ship.velocity * Math.cos(ship.angle - Math.PI/2)
+        }
+        
+
+        
     }
 
     if(ship.isTurningLeft){
@@ -201,30 +250,75 @@ function drawShip(){
 }
 
 
+//Explosão da nave
+function explodeShip () {
+    for (let i = 0; i < asteroids.length; i++) {
+        if(distanceBetweenTwoPoints(ship.coordinates.x, ship.coordinates.y, asteroids[i].coordinates.x, asteroids[i].coordinates.y) < ship.size/4 + asteroids[i].size/2) {
+            if(lives == 1) {
+                isGameOver = true
+            }
 
-//Objeto das balas disparadas pela nave
-// let bullet = {
-//     img: new Image(),
-//     src: "./img/tiro.png",
-//     velocity: 2,
-//     coordinates: {
-//         x: 0,
-//         y: 0
-//     },
-//     angle: 0,
-//     isShooting : false
-// }
+            //Ao bater contra um asteroid, se houver algum que esteja dentro de um raio de 300px do centro, este vai ser removido.(Vai ser criado outro automaticamente)
+            if(distanceBetweenTwoPoints(asteroids[i].coordinates.x, asteroids[i].coordinates.y, canvas.width/2, canvas.height/2) < 300 ) {
+                asteroids.splice(i,1)
+            }
+            ship.velocity = 0
+            ship.coordinates.x = canvas.width / 2
+            ship.coordinates.y = canvas.height / 2
+            drawShip()
+            if(lives > 0) {
+              lives -= 1  
+            }
+        }
+    }
+}
+
+
+//Game over
+function gameOver () {
+    
+    if(isGameOver) {
+        if (score > localStorage.getItem("HighScore")) {
+            localStorage.setItem("HighScore", score)
+        }
+        document.querySelector(".gameOver").style.visibility = "visible"
+        highScore = getHighScore()
+        document.querySelector("#highScoreValue").innerHTML = "High Score: " + highScore
+    }
+}
+
+//Voltar a jogar
+function startAgain () {
+    isGameOver = false
+    asteroids = []
+    bullets = []
+    lives = 3
+    score = 0
+    ship.velocity = 0
+    isStartingAgain = true
+    document.querySelector(".gameOver").style.visibility = "hidden"
+    render()
+}
+
+//Back to Menu (Reload)
+function reload() {
+    window.location.reload()
+}
 
 
 
+//Calcular a distância entre dois pontos
+function distanceBetweenTwoPoints(x1,y1,x2,y2) {
+    return Math.sqrt(Math.pow(x2-x1, 2) + Math.pow(y2-y1, 2))
+}
+
+
+//Criação do objeto das balas ao clicar para disparar
 function shoot() {
     if(ship.isShooting) {
-        console.log("hey")
         bullets.push({
-            img: new Image(),
-            src: "./img/tiro.png",
-            velocity: 2,
-            size: 30,
+            velocity: 8,
+            size: 10,
             coordinates: {
                 x: ship.coordinates.x ,
                 y: ship.coordinates.y
@@ -238,41 +332,56 @@ function shoot() {
 
 
 
-//Desenhar as balas
+//Desenhar as balas no canvas
 function drawBullets() {
     for(let i = 0; i < bullets.length; i++) {
-        bullets[i].img.src = bullets[i].src
-        ctx.save()
-        ctx.translate(bullets[i].coordinates.x, bullets[i].coordinates.y)
-        ctx.rotate(bullets[i].angle)
-        ctx.drawImage(bullets[i].img, -bullets[i].size / 2, -ship.size / 2, bullets[i].size, bullets[i].size)
-        bullets[i].coordinates.y += bullets[i].velocity * Math.sin(bullets[i].angle - Math.PI /2)
-        bullets[i].coordinates.x += bullets[i].velocity * Math.cos(bullets[i].angle - Math.PI / 2)
-        ctx.restore()
-
-        ctx.closePath()
-
-
-
-
 
         //////////////////////// TEMPORARIO /////////////////////////
-        if(bullets.length > 0) {
-            if(bullets[i].coordinates.x >= canvas.width + (bullets[i].size / 2)) {
-                bullets.splice(i, 1)
-            }
-            if(bullets[i].coordinates.y >= bullets[i].height + (bullets[i].size / 2)) {
-                bullets.splice(i, 1)
-            }
-            if(bullets[i].coordinates.x < -(bullets[i].size/2)) {
-                bullets.splice(i, 1)
-            }
-            if(bullets[i].coordinates.y < -(bullets[i].size/2)) {
-                bullets.splice(i, 1)
+        if(bullets[i].coordinates.x >= canvas.width + (bullets[i].size / 2)) {
+            bullets.splice(i, 1)
+            return
+        }
+        if(bullets[i].coordinates.y >= canvas.height + (bullets[i].size / 2)) {
+            bullets.splice(i, 1)
+            return
+        }
+        if(bullets[i].coordinates.x <= (-(bullets[i].size/2))) {
+            bullets.splice(i, 1)
+            return
+        }
+        if(bullets[i].coordinates.y <= (-(bullets[i].size/2))) {
+            bullets.splice(i, 1)
+            return
+        }
+
+
+
+        ctx.beginPath();
+        ctx.arc(bullets[i].coordinates.x, bullets[i].coordinates.y, bullets[i].size/2, 0, 2 * Math.PI);
+        ctx.fillStyle ="orange"
+        ctx.fill()
+        // ctx.translate(, )
+        // ctx.rotate(bullets[i].angle)
+        // ctx.drawImage(bullets[i].img, -bullets[i].size / 2, -ship.size / 2, bullets[i].size, bullets[i].size)
+        bullets[i].coordinates.y += bullets[i].velocity * Math.sin(bullets[i].angle - Math.PI /2)
+        bullets[i].coordinates.x += bullets[i].velocity * Math.cos(bullets[i].angle - Math.PI / 2)
+        // ctx.restore()
+        ctx.closePath()
+
+        
+        for(let j = 0; j < asteroids.length; j++) {
+            if(distanceBetweenTwoPoints(bullets[i].coordinates.x, bullets[i].coordinates.y, asteroids[j].coordinates.x, asteroids[j].coordinates.y) < bullets[i].size/4 + asteroids[j].size/2) {
+                asteroids.splice(j,1)
+                bullets.splice(i,1)
+                score += 200
+                break
             }
         }
+        
     }
 }
+
+
 
 
 function KeyPressed(e){
@@ -324,10 +433,19 @@ function randomDirection(min,max) {
     return Math.random() * (max - min) + min;
 }
 
+//Coordenadas aleatorias dentro do canvas
+function getRandomX () {
+    return Math.random() * (canvas.width - rndSize)
+}
+function getRandomY () {
+    return Math.random() * (canvas.height - rndSize)
+}
+
+
 //HighScore
 function setHighScore () {
     if(!localStorage.getItem("HighScore")) {
-        localStorage.setItem("HighScore", highScore)
+        localStorage.setItem("HighScore", 0)
     }
     document.querySelector("#highScoreValue").innerHTML = "High Score: " + highScore
 }
@@ -335,15 +453,24 @@ function setHighScore () {
 
 //render
 function render() {
-    if(bullets.length > 0) {
-        console.log(bullets[0].coordinates);
-    }
-    
+
+    //Colocar o highscore
+    setHighScore()
+
+    //Colocar as vidas
+    document.querySelector("#livesValue").innerHTML = "Lives: " + lives
+
+    //Colocar o score
+    document.querySelector("#scoreValue").innerHTML = "Score: " + score
+
     //Limpar o canvas
     ctx.clearRect(0,0, canvas.width, canvas.height)
     
     //Desenhar o background
     ctx.drawImage(background,0,0)
+
+    //Criar os Asteroids
+    createAsteroid(8)
 
     //Desenhar asteroids
     drawAsteroid()
@@ -354,10 +481,21 @@ function render() {
     //Desenhar
     drawBullets()
 
-    //Desenhar as balas
+    //Explosão da nave
+    explodeShip()
+
+    //Game Over
+    gameOver()
     
-        
-    requestAnimationFrame(render)
+    if(!isGameOver) {
+        requestAnimationFrame(render)
+    }
+
+    if (isStartingAgain) {
+        isStartingAgain = false
+        createAsteroid(6)
+    }
+    
 
 }
 
