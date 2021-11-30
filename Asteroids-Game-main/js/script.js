@@ -109,6 +109,14 @@ function createAsteroid (num) {
     }
     
     if (asteroids.length < num) {
+        
+        rndX = getRandomX()
+        rndY = getRandomY()
+        rndSize = sizes[Math.floor(Math.random() * sizes.length)] 
+        rndImg = urls[Math.floor(Math.random()* urls.length)]
+        rndVelocity = sizes.findIndex(size => size == rndSize) +2
+        
+        if (distanceBetweenTwoPoints(rndX, rndY, ship.coordinates.x, ship.coordinates.y) > 300) {
         asteroids.push({
             img: new Image(),
             src: rndImg,
@@ -124,6 +132,7 @@ function createAsteroid (num) {
             },
             angle: 0
         })
+    }
     }
 }
 
