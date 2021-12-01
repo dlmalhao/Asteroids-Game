@@ -18,6 +18,7 @@ let bullets = []
 let isGameOver = false
 let isStartingAgain = false
 let rndX, rndY, rndSize, rndImg, rndVelocity
+let canShoot= true
 
 
 
@@ -107,7 +108,9 @@ function createAsteroid (num) {
         rndX = getRandomX()
         rndY = getRandomY()
     }
-    
+
+
+    //Caso o nº de asteroides seja inferior ao num vai adicionar com os dados random e a uma distância de pelo menos 300px da nave
     if (asteroids.length < num) {
         
         rndX = getRandomX()
@@ -334,9 +337,11 @@ function shoot() {
             },
             angle: ship.angle,
         })
+        
         drawBullets()
     }
     ship.isShooting = false
+    
 }
 
 
@@ -394,9 +399,11 @@ function drawBullets() {
 
 
 function KeyPressed(e){
-    if(e.keyCode == 32){
+    if(e.keyCode == 32 && canShoot==true){
         ship.isShooting = true
+        canShoot=false
         shoot()
+        setTimeout(function(){canShoot=true},250)
     }
 
     if(e.key == "w"){
