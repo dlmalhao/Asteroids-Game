@@ -1,4 +1,3 @@
-
 //Variables
 
 const canvas = document.querySelector("#canvas");
@@ -12,12 +11,17 @@ let highScore = getHighScore()
 let lives = 3
 let score = 0
 let asteroids = []
-let sizes = [200,150,100]
-let urls = ["./img/asteroid.png","./img/asteroid2.png"]
+let sizes = [200, 150, 100]
+let urls = ["./img/asteroid.png", "./img/asteroid2.png"]
 let bullets = []
 let isGameOver = false
 let isStartingAgain = false
 let rndX, rndY, rndSize, rndImg, rndVelocity
+
+
+
+
+
 
 
 
@@ -26,11 +30,11 @@ canvas.height = window.innerHeight
 
 
 background.src = "img/fundo.jpg";
-background.onload = function() {
-    ctx.drawImage(background,0,0)
+background.onload = function () {
+    ctx.drawImage(background, 0, 0)
 }
 
-startButton.onclick = function() {
+startButton.onclick = function () {
     fadeOut(startMenu)
 }
 
@@ -44,9 +48,6 @@ window.addEventListener("resize", function () {
 })
 
 
-
-
-
 //Functions
 
 
@@ -58,13 +59,13 @@ function getHighScore() {
 
 //Fade Out
 function fadeOut(element) {
-    var op = 1;  // initial opacity
+    var op = 1; // initial opacity
     var timer = setInterval(function () {
-        if (op <= 0.1){
+        if (op <= 0.1) {
             clearInterval(timer);
             element.style.display = 'none';
             document.querySelector(".initialAnimation").style.visibility = "hidden"
-            
+
             render()
         }
         element.style.opacity = op;
@@ -75,13 +76,13 @@ function fadeOut(element) {
 
 
 //Criação dos asteroids
-function createAsteroid (num) {
-    if(asteroids.length == 0) {
-        for(let i = 0; i < num; i++) {
+function createAsteroid(num) {
+    if (asteroids.length == 0) {
+        for (let i = 0; i < num; i++) {
             rndX = getRandomX()
             rndY = getRandomY()
-            rndSize = sizes[Math.floor(Math.random() * sizes.length)] 
-            rndImg = urls[Math.floor(Math.random()* urls.length)]
+            rndSize = sizes[Math.floor(Math.random() * sizes.length)]
+            rndImg = urls[Math.floor(Math.random() * urls.length)]
             rndVelocity = sizes.findIndex(size => size == rndSize) + 2
             if (distanceBetweenTwoPoints(rndX, rndY, ship.coordinates.x, ship.coordinates.y) > 300) {
                 asteroids.push({
@@ -90,8 +91,8 @@ function createAsteroid (num) {
                     size: rndSize,
                     velocity: rndVelocity,
                     direction: {
-                        x: randomDirection(-1,1),
-                        y: randomDirection(-1,1)
+                        x: randomDirection(-1, 1),
+                        y: randomDirection(-1, 1)
                     },
                     coordinates: {
                         x: rndX,
@@ -99,15 +100,13 @@ function createAsteroid (num) {
                     },
                     angle: 0
                 })
-            } 
+            }
         }
-    }
-
-    else {
+    } else {
         rndX = getRandomX()
         rndY = getRandomY()
     }
-    
+
     if (asteroids.length < num) {
         asteroids.push({
             img: new Image(),
@@ -115,8 +114,8 @@ function createAsteroid (num) {
             size: rndSize,
             velocity: rndVelocity,
             direction: {
-                x: randomDirection(-1,1),
-                y: randomDirection(-1,1)
+                x: randomDirection(-1, 1),
+                y: randomDirection(-1, 1)
             },
             coordinates: {
                 x: rndX,
@@ -129,39 +128,39 @@ function createAsteroid (num) {
 
 
 //Desenho dos asteroids
-function drawAsteroid () {
+function drawAsteroid() {
     for (const asteroid of asteroids) {
-        if(distanceBetweenTwoPoints(asteroid.coordinates.x, asteroid.coordinates.y, ship.coordinates.x, ship.coordinates.y) < 300) {
+        if (distanceBetweenTwoPoints(asteroid.coordinates.x, asteroid.coordinates.y, ship.coordinates.x, ship.coordinates.y) < 300) {
 
         }
         ctx.save()
         ctx.translate(asteroid.coordinates.x, asteroid.coordinates.y)
         ctx.rotate(asteroid.angle * Math.PI / 500)
         asteroid.img.src = asteroid.src
-        ctx.drawImage(asteroid.img, -(asteroid.size/2), -(asteroid.size/2), asteroid.size, asteroid.size)
+        ctx.drawImage(asteroid.img, -(asteroid.size / 2), -(asteroid.size / 2), asteroid.size, asteroid.size)
         ctx.restore()
 
-        asteroid.angle ++
+        asteroid.angle++
 
-        asteroid.coordinates.x += asteroid.direction.x * (asteroid.velocity/2)
-        asteroid.coordinates.y += asteroid.direction.y * (asteroid.velocity/2)
-       
-        
-        
-        
-        
+        asteroid.coordinates.x += asteroid.direction.x * (asteroid.velocity / 2)
+        asteroid.coordinates.y += asteroid.direction.y * (asteroid.velocity / 2)
+
+
+
+
+
 
         //Verificação das bordas
-        if(asteroid.coordinates.x >= canvas.width + (asteroid.size / 2)) {
-            asteroid.coordinates.x = -(asteroid.size/2)
+        if (asteroid.coordinates.x >= canvas.width + (asteroid.size / 2)) {
+            asteroid.coordinates.x = -(asteroid.size / 2)
         }
-        if(asteroid.coordinates.y >= canvas.height + (asteroid.size / 2)) {
-            asteroid.coordinates.y = -(asteroid.size/2)
+        if (asteroid.coordinates.y >= canvas.height + (asteroid.size / 2)) {
+            asteroid.coordinates.y = -(asteroid.size / 2)
         }
-        if(asteroid.coordinates.x < -(asteroid.size/2)) {
+        if (asteroid.coordinates.x < -(asteroid.size / 2)) {
             asteroid.coordinates.x = canvas.width + (asteroid.size / 2)
         }
-        if(asteroid.coordinates.y < -(asteroid.size/2)) {
+        if (asteroid.coordinates.y < -(asteroid.size / 2)) {
             asteroid.coordinates.y = canvas.height + (asteroid.size / 2)
         }
     }
@@ -171,103 +170,101 @@ function drawAsteroid () {
 
 let ship = {
     img: new Image(),
-    size:100,
+    size: 100,
     velocity: 0,
     maxVelocity: 6,
     angle: 0,
-    isMoving:false,
-    isTurningLeft:false,
-    isTurningRigth:false,
+    isMoving: false,
+    isTurningLeft: false,
+    isTurningRigth: false,
     coordinates: {
-        x: canvas.width/2,
-        y: canvas.height/2,
+        x: canvas.width / 2,
+        y: canvas.height / 2,
     },
     isShooting: false
 }
-ship.img.src= "./img/naveSemFogo.png"
+ship.img.src = "./img/naveSemFogo.png"
 
 
 
 //Desenhar a nave
 
-function drawShip(){
-    
+function drawShip() {
+
     ctx.save();
-    ctx.translate(ship.coordinates.x ,ship.coordinates.y)
+    ctx.translate(ship.coordinates.x, ship.coordinates.y)
     ctx.rotate(ship.angle)
-    ctx.drawImage(ship.img, -ship.size/2, -ship.size/2, ship.size, ship.size)
+    ctx.drawImage(ship.img, -ship.size / 2, -ship.size / 2, ship.size, ship.size)
     ctx.restore();
 
-    if(ship.isMoving){
+    if (ship.isMoving) {
         ship.img.src = "./img/nave.png"
-        if(ship.velocity < ship.maxVelocity) {
+        if (ship.velocity < ship.maxVelocity) {
             ship.velocity += 0.1
-            ship.coordinates.y+= ship.velocity * Math.sin(ship.angle - Math.PI/2)
-            ship.coordinates.x+= ship.velocity * Math.cos(ship.angle - Math.PI/2)
-        }
-        else{
+            ship.coordinates.y += ship.velocity * Math.sin(ship.angle - Math.PI / 2)
+            ship.coordinates.x += ship.velocity * Math.cos(ship.angle - Math.PI / 2)
+        } else {
             ship.velocity = ship.maxVelocity
-            ship.coordinates.y+= ship.velocity * Math.sin(ship.angle - Math.PI/2)
-            ship.coordinates.x+= ship.velocity * Math.cos(ship.angle - Math.PI/2)
+            ship.coordinates.y += ship.velocity * Math.sin(ship.angle - Math.PI / 2)
+            ship.coordinates.x += ship.velocity * Math.cos(ship.angle - Math.PI / 2)
         }
-    }
-    else{
-        if(ship.velocity == 0) {
+    } else {
+        if (ship.velocity == 0) {
             ship.velocity = 0
         }
 
-        if(ship.velocity > 0) {
+        if (ship.velocity > 0) {
             ship.velocity -= 0.05
-            ship.coordinates.y+= ship.velocity * Math.sin(ship.angle - Math.PI/2)
-            ship.coordinates.x+= ship.velocity * Math.cos(ship.angle - Math.PI/2)
+            ship.coordinates.y += ship.velocity * Math.sin(ship.angle - Math.PI / 2)
+            ship.coordinates.x += ship.velocity * Math.cos(ship.angle - Math.PI / 2)
         }
-        
 
-        
+
+
     }
 
-    if(ship.isTurningLeft){
-        ship.angle -=0.1
+    if (ship.isTurningLeft) {
+        ship.angle -= 0.1
     }
 
-    if(ship.isTurningRigth){
-        ship.angle +=0.1
+    if (ship.isTurningRigth) {
+        ship.angle += 0.1
     }
 
     //Verificação das bordas
-    if(ship.coordinates.x >= canvas.width + (ship.size / 2)) {
-        ship.coordinates.x = -(ship.size/2)
+    if (ship.coordinates.x >= canvas.width + (ship.size / 2)) {
+        ship.coordinates.x = -(ship.size / 2)
     }
-    if(ship.coordinates.y >= canvas.height + (ship.size / 2)) {
-        ship.coordinates.y = -(ship.size/2)
+    if (ship.coordinates.y >= canvas.height + (ship.size / 2)) {
+        ship.coordinates.y = -(ship.size / 2)
     }
-    if(ship.coordinates.x < -(ship.size/2)) {
+    if (ship.coordinates.x < -(ship.size / 2)) {
         ship.coordinates.x = canvas.width + (ship.size / 2)
     }
-    if(ship.coordinates.y < -(ship.size/2)) {
+    if (ship.coordinates.y < -(ship.size / 2)) {
         ship.coordinates.y = canvas.height + (ship.size / 2)
     }
 }
 
 
 //Explosão da nave
-function explodeShip () {
+function explodeShip() {
     for (let i = 0; i < asteroids.length; i++) {
-        if(distanceBetweenTwoPoints(ship.coordinates.x, ship.coordinates.y, asteroids[i].coordinates.x, asteroids[i].coordinates.y) < ship.size/4 + asteroids[i].size/2) {
-            if(lives == 1) {
+        if (distanceBetweenTwoPoints(ship.coordinates.x, ship.coordinates.y, asteroids[i].coordinates.x, asteroids[i].coordinates.y) < ship.size / 4 + asteroids[i].size / 2) {
+            if (lives == 1) {
                 isGameOver = true
             }
 
             //Ao bater contra um asteroid, se houver algum que esteja dentro de um raio de 300px do centro, este vai ser removido.(Vai ser criado outro automaticamente)
-            if(distanceBetweenTwoPoints(asteroids[i].coordinates.x, asteroids[i].coordinates.y, canvas.width/2, canvas.height/2) < 300 ) {
-                asteroids.splice(i,1)
+            if (distanceBetweenTwoPoints(asteroids[i].coordinates.x, asteroids[i].coordinates.y, canvas.width / 2, canvas.height / 2) < 300) {
+                asteroids.splice(i, 1)
             }
             ship.velocity = 0
             ship.coordinates.x = canvas.width / 2
             ship.coordinates.y = canvas.height / 2
             drawShip()
-            if(lives > 0) {
-              lives -= 1  
+            if (lives > 0) {
+                lives -= 1
             }
         }
     }
@@ -275,9 +272,9 @@ function explodeShip () {
 
 
 //Game over
-function gameOver () {
-    
-    if(isGameOver) {
+function gameOver() {
+
+    if (isGameOver) {
         if (score > localStorage.getItem("HighScore")) {
             localStorage.setItem("HighScore", score)
         }
@@ -288,7 +285,7 @@ function gameOver () {
 }
 
 //Voltar a jogar
-function startAgain () {
+function startAgain() {
     isGameOver = false
     asteroids = []
     bullets = []
@@ -308,19 +305,19 @@ function reload() {
 
 
 //Calcular a distância entre dois pontos
-function distanceBetweenTwoPoints(x1,y1,x2,y2) {
-    return Math.sqrt(Math.pow(x2-x1, 2) + Math.pow(y2-y1, 2))
+function distanceBetweenTwoPoints(x1, y1, x2, y2) {
+    return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2))
 }
 
 
 //Criação do objeto das balas ao clicar para disparar
 function shoot() {
-    if(ship.isShooting) {
+    if (ship.isShooting) {
         bullets.push({
             velocity: 8,
             size: 10,
             coordinates: {
-                x: ship.coordinates.x ,
+                x: ship.coordinates.x,
                 y: ship.coordinates.y
             },
             angle: ship.angle,
@@ -334,22 +331,22 @@ function shoot() {
 
 //Desenhar as balas no canvas
 function drawBullets() {
-    for(let i = 0; i < bullets.length; i++) {
+    for (let i = 0; i < bullets.length; i++) {
 
         //////////////////////// TEMPORARIO /////////////////////////
-        if(bullets[i].coordinates.x >= canvas.width + (bullets[i].size / 2)) {
+        if (bullets[i].coordinates.x >= canvas.width + (bullets[i].size / 2)) {
             bullets.splice(i, 1)
             return
         }
-        if(bullets[i].coordinates.y >= canvas.height + (bullets[i].size / 2)) {
+        if (bullets[i].coordinates.y >= canvas.height + (bullets[i].size / 2)) {
             bullets.splice(i, 1)
             return
         }
-        if(bullets[i].coordinates.x <= (-(bullets[i].size/2))) {
+        if (bullets[i].coordinates.x <= (-(bullets[i].size / 2))) {
             bullets.splice(i, 1)
             return
         }
-        if(bullets[i].coordinates.y <= (-(bullets[i].size/2))) {
+        if (bullets[i].coordinates.y <= (-(bullets[i].size / 2))) {
             bullets.splice(i, 1)
             return
         }
@@ -357,70 +354,70 @@ function drawBullets() {
 
 
         ctx.beginPath();
-        ctx.arc(bullets[i].coordinates.x, bullets[i].coordinates.y, bullets[i].size/2, 0, 2 * Math.PI);
-        ctx.fillStyle ="orange"
+        ctx.arc(bullets[i].coordinates.x, bullets[i].coordinates.y, bullets[i].size / 2, 0, 2 * Math.PI);
+        ctx.fillStyle = "orange"
         ctx.fill()
         // ctx.translate(, )
         // ctx.rotate(bullets[i].angle)
         // ctx.drawImage(bullets[i].img, -bullets[i].size / 2, -ship.size / 2, bullets[i].size, bullets[i].size)
-        bullets[i].coordinates.y += bullets[i].velocity * Math.sin(bullets[i].angle - Math.PI /2)
+        bullets[i].coordinates.y += bullets[i].velocity * Math.sin(bullets[i].angle - Math.PI / 2)
         bullets[i].coordinates.x += bullets[i].velocity * Math.cos(bullets[i].angle - Math.PI / 2)
         // ctx.restore()
         ctx.closePath()
 
-        
-        for(let j = 0; j < asteroids.length; j++) {
-            if(distanceBetweenTwoPoints(bullets[i].coordinates.x, bullets[i].coordinates.y, asteroids[j].coordinates.x, asteroids[j].coordinates.y) < bullets[i].size/4 + asteroids[j].size/2) {
-                asteroids.splice(j,1)
-                bullets.splice(i,1)
+
+        for (let j = 0; j < asteroids.length; j++) {
+            if (distanceBetweenTwoPoints(bullets[i].coordinates.x, bullets[i].coordinates.y, asteroids[j].coordinates.x, asteroids[j].coordinates.y) < bullets[i].size / 4 + asteroids[j].size / 2) {
+                asteroids.splice(j, 1)
+                bullets.splice(i, 1)
                 score += 200
                 break
             }
         }
-        
+
     }
 }
 
 
 
 
-function KeyPressed(e){
-    if(e.keyCode == 32){
+function KeyPressed(e) {
+    if (e.keyCode == 32) {
         ship.isShooting = true
         shoot()
     }
 
-    if(e.key == "w"){
-        
+    if (e.key == "w") {
+
         ship.isMoving = true;
     }
 
-    if(e.key == "a"){
+    if (e.key == "a") {
         ship.isTurningLeft = true;
-        
+
     }
-    if(e.key == "d"){
+    if (e.key == "d") {
         ship.isTurningRigth = true;
     }
 
-    
+
 }
 
-function KeyReleased(e){
-    if(e.key == "w"){
-        ship.img.src= "./img/naveSemFogo.png"
-        ship.isMoving =false;
+function KeyReleased(e) {
+    if (e.key == "w") {
+        ship.img.src = "./img/naveSemFogo.png"
+        ship.isMoving = false;
     }
 
-    if(e.key == "a"){
+    if (e.key == "a") {
         ship.isTurningLeft = false;
     }
 
-    if(e.key == "d"){
+    if (e.key == "d") {
         ship.isTurningRigth = false;
     }
 
-    if(e.keyCode == 32){
+    if (e.keyCode == 32) {
         ship.isShooting = false
     }
 }
@@ -429,22 +426,23 @@ window.addEventListener('keydown', KeyPressed);
 window.addEventListener('keyup', KeyReleased)
 
 //Script direção aleatória para os asteroids
-function randomDirection(min,max) {
+function randomDirection(min, max) {
     return Math.random() * (max - min) + min;
 }
 
 //Coordenadas aleatorias dentro do canvas
-function getRandomX () {
+function getRandomX() {
     return Math.random() * (canvas.width - rndSize)
 }
-function getRandomY () {
+
+function getRandomY() {
     return Math.random() * (canvas.height - rndSize)
 }
 
 
 //HighScore
-function setHighScore () {
-    if(!localStorage.getItem("HighScore")) {
+function setHighScore() {
+    if (!localStorage.getItem("HighScore")) {
         localStorage.setItem("HighScore", 0)
     }
     document.querySelector("#highScoreValue").innerHTML = "High Score: " + highScore
@@ -464,10 +462,10 @@ function render() {
     document.querySelector("#scoreValue").innerHTML = "Score: " + score
 
     //Limpar o canvas
-    ctx.clearRect(0,0, canvas.width, canvas.height)
-    
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+
     //Desenhar o background
-    ctx.drawImage(background,0,0)
+    ctx.drawImage(background, 0, 0)
 
     //Criar os Asteroids
     createAsteroid(8)
@@ -486,8 +484,8 @@ function render() {
 
     //Game Over
     gameOver()
-    
-    if(!isGameOver) {
+
+    if (!isGameOver) {
         requestAnimationFrame(render)
     }
 
@@ -495,7 +493,43 @@ function render() {
         isStartingAgain = false
         createAsteroid(6)
     }
-    
+
+
+}
+
+
+
+
+var slideIndex = 1;
+showSlides(slideIndex);
+
+// Next/previous controls
+function plusSlides(n) {
+    showSlides(slideIndex += n);
+}
+
+// Thumbnail image controls
+function currentSlide(n) {
+    showSlides(slideIndex = n);
+}
+
+function showSlides(n) {
+    var i;
+    var slides = document.getElementsByClassName("mySlides");
+    var dots = document.getElementsByClassName("dot");
+    if (n > slides.length) {
+        slideIndex = 1
+    }
+    if (n < 1) {
+        slideIndex = slides.length
+    }
+    for (i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";
+    }
+    for (i = 0; i < dots.length; i++) {
+        dots[i].className = dots[i].className.replace(" active", "");
+    }
+    slides[slideIndex - 1].style.display = "block";
 
 }
 
@@ -504,4 +538,23 @@ function quit() {
     window.close()
 }
 
+/* 
+Função abrir o menu options */
 
+function functionModal() {
+
+    document.getElementById('optionsButton').addEventListener('click', (e) => {
+        e.preventDefault();
+        document.querySelector('#menuOptions').showModal();
+    })
+
+    document.getElementById('closeModalButton').addEventListener('click', (e) => {
+        e.preventDefault();
+        document.querySelector('#menuOptions').close();
+    })
+}
+
+function changeMusicVolume(musicVolume) {
+    console.log(musicVolume)
+
+}

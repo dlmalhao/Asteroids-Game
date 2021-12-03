@@ -21,10 +21,10 @@ canvas.height = window.innerHeight
 // })
 
 
-setTimeout(function () {
+/* setTimeout(function () {
     location.href = '../Asteroids-Game-main/index.html';
 }, 7700);
-
+ */
 
 background.onload = function () {
     ctx.drawImage(background, 0, 0)
@@ -82,3 +82,23 @@ function start() {
     ctx.fillStyle = "white"
     ctx.fill()
 }
+
+
+/* Mudança de página depois de x temporário */
+
+/* Funções dos sons */
+
+
+    document.getElementById("asteroidSound").play();
+
+    setTimeout(function () {
+        document.getElementById("gunshotSound").play();
+    }, 8000)
+
+    setTimeout(function () {
+        document.getElementById("ufoSound").play();
+    }, 8000)
+
+    setTimeout(function () {
+        document.getElementById("explosionSound").play();
+    }, 8000)

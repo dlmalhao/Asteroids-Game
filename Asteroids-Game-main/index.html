@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,11 +8,22 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="icon" href="./img/asteroid.png" type="image/x-icon">
     <title>ASTEROIDS
-        
+
     </title>
 </head>
 
 <body>
+    <div id="soundEffects" style="display: none">
+        <audio controls src="./mp3/Gunshot.mp3" id="gunshotSound" type="audio/mp3"></audio>
+        <audio controls src="./mp3/UFO noise.mp3" id="ufoSound" type="audio/mp3"></audio>
+        <audio controls src="./mp3/Explosion.mp3" id="explosionSound" type="audio/mp3"></audio>
+        <audio controls src="./mp3/asteroid.mp3" id="asteroidSound" type="audio/mp3"></audio>
+    </div>
+
+    <div id="music" style="display: none">
+        <audio controls src="./mp3/Space Oddity (8-Bits).mp3" autoplay="true"></audio>
+    </div>
+
     <main class="main">
         <div class="canvasContainer">
             <!-- <embed src="img/fundo.svg" alt="" id="background"> -->
@@ -44,7 +56,7 @@
                 </div>
                 <div class="container">
                     <div class="block">
-                        <div class="btn" id="optionsButton">
+                        <div class="btn" id="optionsButton" onclick="functionModal()">
                             <h4>Options</h4>
                         </div>
                     </div>
@@ -58,8 +70,73 @@
                 </div>
             </div>
 
-
         </menu>
+
+
+        <dialog id="menuOptions">
+            <section>
+                <h1 id="optionsTitle">Options</h1>
+                <div class="sounds">
+                    <h3>Music volume</h3>
+                    <div class="slidecontainer">
+                        <input type="range" min="1" max="100" value="50" class="slider" id="musicRange">
+                    </div>
+                </div>
+                <div class="sounds">
+                    <h3>Sound effects</h3>
+                    <div class="slidecontainer">
+                        <input type="range" min="1" max="100" value="50" class="slider" id="soundRange" oninput="changeMusicVolume(this.value)">
+                    </div>
+                </div>
+                <div id="chooseStyle">
+                    <h3 style="text-align:center">Style</h3>
+                    <div class="slideshow-container">
+
+                        <!-- Full-width images with number and caption text -->
+                        <div class="mySlides fade contentInsideMenu">
+                            <img src="img/nave.png" style="width:200px">
+                            <div class="text">Pixel</div>
+                        </div>
+
+                        <div class="mySlides fade contentInsideMenu" style="margin-top:20px">
+                            <img src="img/Nave com fogo-tema original.png"
+                                style="width:200px; margin-bottom:40px; margin-right:130px">
+                            <div class="text">Clássico</div>
+                        </div>
+
+                        <div class="mySlides fade contentInsideMenu">
+                            <img src="img/Nave com fogo-tema realista.png" style="width:180px;margin-bottom:15px">
+                            <div class="text">Realista</div>
+                        </div>
+
+                        <!-- Next and previous buttons -->
+                        <button class="prev" onclick="plusSlides(-1)">&#10094;</button>
+                        <button class="next" onclick="plusSlides(1)">&#10095;</button>
+                    </div>
+                    <br>
+                </div>
+                <div class="container">
+                    <div class="block">
+                        <div class="btn" id="closeModalButton" onclick="functionModal()">
+                            <h4>Back</h4>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+        </dialog>
+
+
+
+
+
+
+
+
+
+
+
+
         <div class="gameOver">
             <img src="./img/gameover.png" alt="">
             <div class="firstContainer">
@@ -87,6 +164,8 @@
             </div>
         </div>
     </main>
+
+    
 
 
 
