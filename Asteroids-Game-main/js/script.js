@@ -17,6 +17,7 @@ let bullets = []
 let isGameOver = false
 let isStartingAgain = false
 let rndX, rndY, rndSize, rndImg, rndVelocity
+let canShoot = true
 
 
 
@@ -107,22 +108,33 @@ function createAsteroid(num) {
         rndY = getRandomY()
     }
 
+    //Caso o nº de asteroides seja inferior ao num vai adicionar com os dados random e a uma distância de pelo menos 300px da nave
+
     if (asteroids.length < num) {
-        asteroids.push({
-            img: new Image(),
-            src: rndImg,
-            size: rndSize,
-            velocity: rndVelocity,
-            direction: {
-                x: randomDirection(-1, 1),
-                y: randomDirection(-1, 1)
-            },
-            coordinates: {
-                x: rndX,
-                y: rndY
-            },
-            angle: 0
-        })
+
+        rndX = getRandomX()
+        rndY = getRandomY()
+        rndSize = sizes[Math.floor(Math.random() * sizes.length)]
+        rndImg = urls[Math.floor(Math.random() * urls.length)]
+        rndVelocity = sizes.findIndex(size => size == rndSize) + 2
+
+        if (distanceBetweenTwoPoints(rndX, rndY, ship.coordinates.x, ship.coordinates.y) > 300) {
+            asteroids.push({
+                img: new Image(),
+                src: rndImg,
+                size: rndSize,
+                velocity: rndVelocity,
+                direction: {
+                    x: randomDirection(-1, 1),
+                    y: randomDirection(-1, 1)
+                },
+                coordinates: {
+                    x: rndX,
+                    y: rndY
+                },
+                angle: 0
+            })
+        }
     }
 }
 
@@ -322,9 +334,11 @@ function shoot() {
             },
             angle: ship.angle,
         })
+
         drawBullets()
     }
     ship.isShooting = false
+
 }
 
 
@@ -381,10 +395,15 @@ function drawBullets() {
 
 
 
+
 function KeyPressed(e) {
-    if (e.keyCode == 32) {
+    if (e.keyCode == 32 && canShoot == true) {
         ship.isShooting = true
+        canShoot = false
         shoot()
+        setTimeout(function () {
+            canShoot = true
+        }, 250)
     }
 
     if (e.key == "w") {
