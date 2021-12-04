@@ -11,6 +11,7 @@ let highScore = getHighScore()
 let lives = 3
 let score = 0
 let asteroids = []
+let aliens=[]
 let sizes = [200, 150, 100]
 let urls = ["./img/asteroid.png", "./img/asteroid2.png"]
 let bullets = []
@@ -18,6 +19,7 @@ let isGameOver = false
 let isStartingAgain = false
 let rndX, rndY, rndSize, rndImg, rndVelocity
 let canShoot = true
+let scoreAlien=1
 
 
 
@@ -138,7 +140,6 @@ function createAsteroid(num) {
     }
 }
 
-
 //Desenho dos asteroids
 function drawAsteroid() {
     for (const asteroid of asteroids) {
@@ -177,6 +178,85 @@ function drawAsteroid() {
         }
     }
 }
+
+//Criação dos aliens
+function createAlien(){
+        rndX = getRandomX()
+        rndY = getRandomY()
+
+        if(aliens.length == 0){
+            aliens.push({
+                img: new Image(),
+                src: "./img/alien.png",
+                size:100,
+                velocity:5,
+                direction:{
+                    x: randomDirection(-1, 1),
+                    y: randomDirection(-1, 1)
+                },
+                coordinates: {
+                    x: rndX,
+                    y: rndY
+                },
+                angle: 0,
+                isAlive: false,
+
+            })
+        }
+
+        // if (distanceBetweenTwoPoints(rndX, rndY, ship.coordinates.x, ship.coordinates.y) > 300) {
+           
+        // }
+        
+}
+
+
+
+//Desenho dos Aliens
+function drawAlien(){
+    if(aliens[0].isAlive ){
+        
+        ctx.save()
+        ctx.translate(aliens[0].coordinates.x, aliens[0].coordinates.y)
+        ctx.rotate(aliens[0].angle * Math.PI / 500)
+        aliens[0].img.src = aliens[0].src
+        ctx.drawImage(aliens[0].img, -(aliens[0].size / 2), -(aliens[0].size / 2), aliens[0].size, aliens[0].size)
+        ctx.restore()
+        
+        
+        
+        
+        
+    }
+    if(score >= scoreAlien*2000 ){
+        scoreAlien++
+        aliens[0].isAlive = true
+    }
+        aliens[0].angle++
+
+        aliens[0].coordinates.x += aliens[0].direction.x * (aliens[0].velocity / 2)
+        aliens[0].coordinates.y += aliens[0].direction.y * (aliens[0].velocity / 2)
+
+
+        //Verificação das bordas
+        if (aliens[0].coordinates.x >= canvas.width + (aliens[0].size / 2)) {
+            aliens[0].coordinates.x = -(aliens[0].size / 2)
+        }
+        if (aliens[0].coordinates.y >= canvas.height + (aliens[0].size / 2)) {
+            aliens[0].coordinates.y = -(aliens[0].size / 2)
+        }
+        if (aliens[0].coordinates.x < -(aliens[0].size / 2)) {
+            aliens[0].coordinates.x = canvas.width + (aliens[0].size / 2)
+        }
+        if (aliens[0].coordinates.y < -(aliens[0].size / 2)) {
+            aliens[0].coordinates.y = canvas.height + (aliens[0].size / 2)
+        }
+
+    
+    
+}
+
+
 
 //Criar a nave
 
@@ -380,14 +460,36 @@ function drawBullets() {
         ctx.closePath()
 
 
+        let idxFound = null
+
         for (let j = 0; j < asteroids.length; j++) {
             if (distanceBetweenTwoPoints(bullets[i].coordinates.x, bullets[i].coordinates.y, asteroids[j].coordinates.x, asteroids[j].coordinates.y) < bullets[i].size / 4 + asteroids[j].size / 2) {
                 asteroids.splice(j, 1)
-                bullets.splice(i, 1)
+                idxFound= i 
                 score += 200
                 break
             }
+            
+            
         }
+        if(aliens[0].isAlive){
+            if (distanceBetweenTwoPoints(bullets[i].coordinates.x, bullets[i].coordinates.y, aliens[0].coordinates.x, aliens[0].coordinates.y) < bullets[i].size / 4 + aliens[0].size / 2) {
+                // aliens.splice(0, 1)
+                idxFound= i 
+                aliens[0].isAlive = false
+                score += 500
+                break
+        }
+        }
+        
+        if(idxFound != null) {
+            bullets.splice(idxFound, 1)
+        }
+        
+
+        
+       
+        
 
     }
 }
@@ -488,6 +590,11 @@ function render() {
 
     //Criar os Asteroids
     createAsteroid(8)
+
+    //Criar Aliens
+    createAlien()
+
+    drawAlien()
 
     //Desenhar asteroids
     drawAsteroid()
