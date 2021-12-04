@@ -5,21 +5,22 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/Asteroids - intro/style.css">
+    <link rel="stylesheet" href="style.css">
     <link rel="icon" href="./img/asteroid.png" type="image/x-icon">
     <title>ASTEROIDS</title>
 </head>
 
 <body>
     <div>
-        <audio controls src="./mp3/Space Oddity (8-Bits).mp3" autoplay="true"></audio>
-        <audio controls src="./mp3/Gunshot.mp3" id="gunshotSound" type="audio/mp3"></audio>
-        <audio controls src="./mp3/UFO noise.mp3" id="ufoSound" type="audio/mp3"></audio>
-        <audio controls src="./mp3/Explosion.mp3" id="explosionSound" type="audio/mp3"></audio>
-        <audio controls src="./mp3/asteroid.mp3" id="asteroidSound" type="audio/mp3"></audio>
+        <audio id="initialMusic" >
+            <source src="./mp3/Space Oddity (8-Bits).mp3"type="audio/mpeg">
+        </audio>
+        <audio src="./mp3/asteroid.mp3" id="asteroidSound" type="audio/mpeg"></audio>
+        <audio src="./mp3/Explosion.mp3" id="explosionSound" type="audio/mpeg"></audio>
+        <audio src="./mp3/Gunshot.mp3" id="gunshotSound" type="audio/mpeg"></audio>
+        <audio src="./mp3/UFO noise.mp3" id="ufoSound" type="audio/mpeg"></audio>
     </div>
-
-
+    
     <main>
         <div class="canvasContainer">
             <!-- <embed src="img/fundo.svg" alt="" id="background"> -->
@@ -45,7 +46,7 @@
     </main>
 
 
-    <script src="/Asteroids - intro/script.js"></script>
+    <script src="script.js"></script>
 </body>
 
 </html>

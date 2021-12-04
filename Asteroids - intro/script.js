@@ -9,29 +9,25 @@ let startMenu = document.querySelector("#startMenu")
 let startButton = document.querySelector("#startButton")
 
 
+
+/* Sounds */
+
+let music = document.getElementById("initialMusic");
+const bullet = document.getElementById("gunshotSound")
+const explosion = document.getElementById("explosionSound")
+const asteroidHover = document.getElementById("asteroidSound")
+const ufoSound = document.getElementById("ufoSound")
+
+window.focus()
+
+
+/* Adjust background */
+
 canvas.width = window.innerWidth
 canvas.height = window.innerHeight
 
-
-// window.addEventListener("resize", function() {
-//     canvas.width = window.innerWidth
-//     canvas.height = window.innerHeight
-//     ctx.clearRect(0, 0, canvas.width, canvas.height)
-//     drawBackground()
-// })
-
-
-/* setTimeout(function () {
-    location.href = '../Asteroids-Game-main/index.html';
-}, 7700);
- */
-
 background.onload = function () {
     ctx.drawImage(background, 0, 0)
-}
-
-startButton.onclick = function () {
-    fadeOut(startMenu)
 }
 
 
@@ -44,61 +40,26 @@ window.addEventListener("resize", function () {
 })
 
 
+/* Sound player */
 
-
-
-
-
-//Functions
-
-
-
-
-
-
-function fadeOut(element) {
-
-    var op = 1; // initial opacity
-    var timer = setInterval(function () {
-        if (op <= 0.1) {
-            clearInterval(timer);
-            element.style.display = 'none';
-            start()
-        }
-        element.style.opacity = op;
-        element.style.filter = 'alpha(opacity=' + op * 100 + ")";
-        op -= op * 0.1;
-    }, 50)
-
-
-}
-
-
-function start() {
-
-    //Variables
-    ctx.beginPath()
-    ctx.arc(100, 100, 10, 0, Math.PI * 2, true)
-    ctx.fillStyle = "white"
-    ctx.fill()
-}
-
-
-/* Mudança de página depois de x temporário */
-
-/* Funções dos sons */
-
-
-    document.getElementById("asteroidSound").play();
-
+setTimeout(function () {
+    asteroidHover.play();
     setTimeout(function () {
-        document.getElementById("gunshotSound").play();
-    }, 8000)
+        ufoSound.play();
+        setTimeout(function () {
+            bullet.play();
+            setTimeout(function () {
+                explosionSound.play();
+            }, 300);
+        }, 2000)
+    }, 5000);
+}, 0)
 
-    setTimeout(function () {
-        document.getElementById("ufoSound").play();
-    }, 8000)
 
-    setTimeout(function () {
-        document.getElementById("explosionSound").play();
-    }, 8000)
+
+/* Load the new page transition */
+setTimeout(function () {
+    location.href = '../Asteroids-Game-main/index.html';
+}, 7700);
+
+

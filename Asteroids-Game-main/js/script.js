@@ -22,6 +22,14 @@ let canShoot = true
 let scoreAlien=1
 
 
+/* Sounds used in the game */
+
+let initialMusic = document.getElementById("initialMusic")
+let shootingSound = document.getElementById("gunshotSound")
+
+initialMusic.play()
+
+
 
 
 
@@ -143,9 +151,9 @@ function createAsteroid(num) {
 //Desenho dos asteroids
 function drawAsteroid() {
     for (const asteroid of asteroids) {
-        if (distanceBetweenTwoPoints(asteroid.coordinates.x, asteroid.coordinates.y, ship.coordinates.x, ship.coordinates.y) < 300) {
+        // if (distanceBetweenTwoPoints(asteroid.coordinates.x, asteroid.coordinates.y, ship.coordinates.x, ship.coordinates.y) < 300) {
 
-        }
+        // }
         ctx.save()
         ctx.translate(asteroid.coordinates.x, asteroid.coordinates.y)
         ctx.rotate(asteroid.angle * Math.PI / 500)
@@ -279,6 +287,44 @@ ship.img.src = "./img/naveSemFogo.png"
 
 
 
+let explosion = {
+    img: new Image(),
+    size: 150,
+    angle: 0,
+    coordinates: {
+        x: 0,
+        y: 0,
+    },
+    isExploding: false
+}
+explosion.img.src = "./img/explosion.png"
+
+
+function drawExplosion () {
+    if(explosion.isExploding == true) {
+
+        ctx.save()
+        ctx.translate(explosion.coordinates.x, explosion.coordinates.y)
+        ctx.rotate(explosion.angle)
+        ctx.drawImage(explosion.img, -explosion.size/2, -explosion.size/2, explosion.size, explosion.size)
+        ctx.restore()
+
+        setTimeout (()=>{
+            explosion.angle = 180
+        },50) 
+
+        setTimeout (()=>{
+            explosion.angle = 0
+        },100) 
+
+        setTimeout(() => {
+            explosion.isExploding = false
+        }, 150);
+    }
+}
+
+
+
 //Desenhar a nave
 
 function drawShip() {
@@ -342,21 +388,29 @@ function drawShip() {
 //Explosão da nave
 function explodeShip() {
     for (let i = 0; i < asteroids.length; i++) {
+        //
         if (distanceBetweenTwoPoints(ship.coordinates.x, ship.coordinates.y, asteroids[i].coordinates.x, asteroids[i].coordinates.y) < ship.size / 4 + asteroids[i].size / 2) {
+            explosion.coordinates.x = ship.coordinates.x
+            explosion.coordinates.y = ship.coordinates.y
+            explosion.isExploding = true
             if (lives == 1) {
+                lives = 0
                 isGameOver = true
+                
             }
+            else {
+                //Ao bater contra um asteroid, se houver algum que esteja dentro de um raio de 300px do centro, este vai ser removido.(Vai ser criado outro automaticamente)
+                if (distanceBetweenTwoPoints(asteroids[i].coordinates.x, asteroids[i].coordinates.y, canvas.width / 2, canvas.height / 2) < 300) {
+                    asteroids.splice(i, 1)
+                }
 
-            //Ao bater contra um asteroid, se houver algum que esteja dentro de um raio de 300px do centro, este vai ser removido.(Vai ser criado outro automaticamente)
-            if (distanceBetweenTwoPoints(asteroids[i].coordinates.x, asteroids[i].coordinates.y, canvas.width / 2, canvas.height / 2) < 300) {
-                asteroids.splice(i, 1)
-            }
-            ship.velocity = 0
-            ship.coordinates.x = canvas.width / 2
-            ship.coordinates.y = canvas.height / 2
-            drawShip()
-            if (lives > 0) {
-                lives -= 1
+                ship.velocity = 0
+                ship.coordinates.x = canvas.width / 2
+                ship.coordinates.y = canvas.height / 2
+                drawShip()
+                if (lives > 0) {
+                    lives -= 1
+                }
             }
         }
     }
@@ -375,6 +429,7 @@ function gameOver() {
         document.querySelector("#highScoreValue").innerHTML = "High Score: " + highScore
     }
 }
+
 
 //Voltar a jogar
 function startAgain() {
@@ -463,15 +518,18 @@ function drawBullets() {
         let idxFound = null
 
         for (let j = 0; j < asteroids.length; j++) {
+            //Se a bala bater no asteroid, este vai ser removido do array
             if (distanceBetweenTwoPoints(bullets[i].coordinates.x, bullets[i].coordinates.y, asteroids[j].coordinates.x, asteroids[j].coordinates.y) < bullets[i].size / 4 + asteroids[j].size / 2) {
+                explosion.coordinates.x = asteroids[j].coordinates.x
+                explosion.coordinates.y = asteroids[j].coordinates.y               
+                explosion.isExploding = true
                 asteroids.splice(j, 1)
                 idxFound= i 
                 score += 200
                 break
             }
-            
-            
         }
+        
         if(aliens[0].isAlive){
             if (distanceBetweenTwoPoints(bullets[i].coordinates.x, bullets[i].coordinates.y, aliens[0].coordinates.x, aliens[0].coordinates.y) < bullets[i].size / 4 + aliens[0].size / 2) {
                 // aliens.splice(0, 1)
@@ -495,9 +553,6 @@ function drawBullets() {
 }
 
 
-
-
-
 function KeyPressed(e) {
     if (e.keyCode == 32 && canShoot == true) {
         ship.isShooting = true
@@ -506,6 +561,7 @@ function KeyPressed(e) {
         setTimeout(function () {
             canShoot = true
         }, 250)
+        shootingSound.play()
     }
 
     if (e.key == "w") {
@@ -525,21 +581,23 @@ function KeyPressed(e) {
 }
 
 function KeyReleased(e) {
-    if (e.key == "w") {
+    console.log(e.key);
+    if (e.key == "w" || e.key == "W") {
         ship.img.src = "./img/naveSemFogo.png"
         ship.isMoving = false;
     }
 
-    if (e.key == "a") {
+    if (e.key == "a" || e.key == "A") {
         ship.isTurningLeft = false;
     }
 
-    if (e.key == "d") {
+    if (e.key == "d" || e.key == "D") {
         ship.isTurningRigth = false;
     }
 
     if (e.keyCode == 32) {
         ship.isShooting = false
+        shootingSound.stop()
     }
 }
 
@@ -611,6 +669,8 @@ function render() {
     //Game Over
     gameOver()
 
+    drawExplosion()
+
     if (!isGameOver) {
         requestAnimationFrame(render)
     }
@@ -619,8 +679,6 @@ function render() {
         isStartingAgain = false
         createAsteroid(6)
     }
-
-
 }
 
 
