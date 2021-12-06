@@ -82,6 +82,7 @@
 
         <dialog id="menuOptions">
             <section>
+                <h3 id="closeModalButton" onclick="functionModal()" style="margin: 10px; display: flex; justify-content: end; cursor: pointer;">X</h3>
                 <h1 id="optionsTitle">Options</h1>
                 <div class="sounds">
                     <h3>Music volume</h3>
@@ -103,45 +104,37 @@
                         <div class="mySlides fade contentInsideMenu">
                             <img src="img/nave.png" style="width:200px">
                             <div class="text">Pixel</div>
+                            <div class="btn" style="top: 20px; left: 183px;" onclick="changeShipPixel()">
+                                <h4>Select</h4>
+                            </div>
                         </div>
 
                         <div class="mySlides fade contentInsideMenu" style="margin-top:20px">
-                            <img src="img/Nave com fogo-tema original.png"
-                                style="width:200px; margin-bottom:40px; margin-right:130px">
+                            <img src="img/Nave com fogo-tema original.png" style="width:200px; margin-bottom:40px; margin-right:130px">
                             <div class="text">Clássico</div>
+                            <div class="btn" style="top: 20px; left: 183px;" onclick="changeShipClassico()">
+                                <h4>Select</h4>
+                            </div>
                         </div>
 
                         <div class="mySlides fade contentInsideMenu">
                             <img src="img/Nave com fogo-tema realista.png" style="width:180px;margin-bottom:15px">
                             <div class="text">Realista</div>
+                            <div class="btn" style="top: 20px; left: 183px;" onclick="changeShipRealista()">
+                                <h4>Select</h4>
+                            </div>
                         </div>
 
                         <!-- Next and previous buttons -->
-                        <button class="prev" onclick="plusSlides(-1)">&#10094;</button>
-                        <button class="next" onclick="plusSlides(1)">&#10095;</button>
+                        <div class="slidebtns" style="    display: flex; justify-content: space-between; bottom: 160px; position: relative;">
+                            <button class="prev" onclick="plusSlides(-1)">&#10094;</button>
+                            <button class="next" onclick="plusSlides(1)">&#10095;</button>
+                        </div>
                     </div>
                     <br>
                 </div>
-                <div class="container">
-                    <div class="block">
-                        <div class="btn" id="closeModalButton" onclick="functionModal()">
-                            <h4>Back</h4>
-                        </div>
-                    </div>
-                </div>
-
             </section>
         </dialog>
-
-
-
-
-
-
-
-
-
-
 
 
         <div class="gameOver">
@@ -175,7 +168,7 @@
     
 
 
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="js/script.js"></script>
 </body>
 
