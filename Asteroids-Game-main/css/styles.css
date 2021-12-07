@@ -28,7 +28,7 @@ main {
   align-items: center;
 }
 
-/* MENU */
+/* Todas as configurações do menu options */
 
 #menuOptions {
   z-index: 1000;
@@ -51,13 +51,25 @@ main {
   overflow: hidden;
 }
 
+
+#menuOptions #optionsTitle {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 40px;
+  margin-bottom: 40px;
+  background: linear-gradient(48deg, rgb(185, 6, 155) 0%, rgb(241, 202, 235) 35%, rgb(190, 0, 159) 100%);
+  -webkit-background-clip: text;
+  /* Isto serve para que o gradiente fique colocado no interior do texto */
+  -webkit-text-fill-color: transparent;
+  text-align: center;
+}
+
+/* Parte especifica: som */
 .sounds {
   margin-bottom: 20px;
 }
 
-
-
-/* Slider que controlam o som */
+/* Sliders que controlam o som */
 
 .slidecontainer {
   position: absolute;
@@ -67,7 +79,7 @@ main {
   width: 270px;
 }
 
-/* The slider itself */
+/* O próprio slider */
 .slider {
   -webkit-appearance: none;
   appearance: none;
@@ -80,7 +92,7 @@ main {
   transition: opacity 0.2s;
 }
 
-/* Mouse-over effects */
+/* Efeitos quando se passa o rato */
 .slider:hover {
   opacity: 1;
 }
@@ -101,38 +113,27 @@ main {
 }
 
 
-#menuOptions #optionsTitle {
-  margin-top: 20px;
-  text-align: center;
-  font-size: 40px;
-  margin-bottom: 40px;
-  background: linear-gradient(48deg, rgb(185, 6, 155) 0%, rgb(241, 202, 235) 35%, rgb(190, 0, 159) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-align: center;
-
-}
-
+/* Parte de escolha de estilo */
 
 #chooseStyle {
   margin-top: 40px;
 }
 
-/* Slideshow container */
+/* container carrosel */
 .slideshow-container {
   max-width: 1000px;
   position: relative;
   margin: auto;
 }
 
-/* Hide the images by default */
+/* Imagens alinhadas */
 .contentInsideMenu {
   position: relative;
   margin: auto;
   text-align: center;
 }
 
-/* Next & previous buttons */
+/* Botoes de antes e depois */
 .prev,
 .next {
   cursor: pointer;
@@ -153,13 +154,13 @@ main {
 
 }
 
-/* Position the "next button" to the right */
+/* Ajustes extra ao botão proximo */
 .next {
   right: 0;
   border-radius: 3px 0 0 3px;
 }
 
-/* On hover, add a black background color with a little bit see-through */
+/* Quando se sobrepõe o rato, o fundo altera */
 .prev:hover,
 .next:hover {
   color: #500243;
@@ -168,7 +169,7 @@ main {
   font-size: 18px;
 }
 
-/* Caption text */
+/* Texto de descrição */
 .text {
   color: #f2f2f2;
   font-size: 15px;
@@ -206,6 +207,7 @@ main {
   }
 }
 
+/* Canvas */
 body .canvas {
   position: relative;
   transform: translateY(-50%);
@@ -219,6 +221,8 @@ body .canvas {
   width: 100%;
   height: 100%;
 }
+
+/* Menu de começo */
 
 #startMenu {
   position: absolute;
@@ -246,18 +250,13 @@ body .canvas {
   align-items: center;
 }
 
-.btn {
-  margin-bottom: 20%;
-  width: 100%;
-  transition: 0.25s;
-  background: none;
-}
-
 h4 {
   font-weight: 400;
   text-transform: uppercase;
   font-size: 20px;
 }
+
+/* Ecrã do menu quando se perde */
 
 .gameOver {
   display: flex;
@@ -321,6 +320,15 @@ h4 {
   overflow: hidden;
   position: relative;
   padding-bottom: 30px;
+}
+
+
+/* Estilização dos botoes */
+.btn {
+  margin-bottom: 20%;
+  width: 100%;
+  transition: 0.25s;
+  background: none;
 }
 
 .btn {
@@ -397,6 +405,8 @@ h4 {
   transform: scale(80%);
 }
 
+/* Animação no ecrã principal  */
+
 .initialAnimation {
   width: 100%;
   height: 100%;
@@ -422,10 +432,14 @@ h4 {
   top: 30%;
 }
 
+/* Definiçao das animaçoes */
+
+/* Texto inicial */
 .focus-in-expand {
   animation: focus-in-expand 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
 }
 
+/* Nave */
 @keyframes floating {
   0% {
     transform: translate(0, -20px);
@@ -452,36 +466,6 @@ h4 {
   }
 }
 
-/* .floating {
-  animation: floating 5s ease-in-out 15s infinite normal forwards;
-}
-
-@keyframes myAnim {
-  0% {
-    transform: translate(0);
-  }
-
-  20% {
-    transform: translate(-2px, 2px);
-  }
-
-  40% {
-    transform: translate(-2px, -2px);
-  }
-
-  60% {
-    transform: translate(2px, 2px);
-  }
-
-  80% {
-    transform: translate(2px, -2px);
-  }
-
-  100% {
-    transform: translate(0);
-  }
-} */
-
 @-webkit-keyframes slide-in-bottom {
   0% {
     -webkit-transform: translateY(1000px);
@@ -507,6 +491,8 @@ h4 {
     opacity: 1;
   }
 }
+
+/* Mais texto inicial */
 
 @-webkit-keyframes focus-in-expand {
   0% {
@@ -538,7 +524,7 @@ h4 {
   }
 }
 
-/*   FADE IN ANIMATIONS FOR DIFFERENT BROWSERS   */
+/*   Animações fade in dependendo do browser  */
 
 @keyframes fadeIn {
   from {

@@ -13,22 +13,13 @@
 </head>
 
 <body>
-    <!-- <div id="soundEffects" style="display: none">
-        <audio controls src="./mp3/Gunshot.mp3" id="gunshotSound" type="audio/mp3"></audio>
-        <audio controls src="./mp3/UFO noise.mp3" id="ufoSound" type="audio/mp3"></audio>
-        <audio controls src="./mp3/Explosion.mp3" id="explosionSound" type="audio/mp3"></audio>
-        <audio controls src="./mp3/asteroid.mp3" id="asteroidSound" type="audio/mp3"></audio>
-    </div> -->
-
-    <!-- <div id="music" style="display: none">
-        <audio controls src="./mp3/Space Oddity (8-Bits).mp3" autoplay="true"></audio>
-    </div> -->
-
+    <!-- Componente div com os audios utilizados nesta página html -->
     <div>
-        <audio id="initialMusic" >
-            <source src="./mp3/Space Oddity (8-Bits).mp3"type="audio/mpeg">
+        <audio id="initialMusic">
+            <source src="./mp3/Space Oddity (8-Bits).mp3" type="audio/mpeg">
         </audio>
         <audio src="./mp3/Gunshot.mp3" id="gunshotSound" type="audio/mpeg"></audio>
+        <audio src="./mp3/Explosion.mp3" id="explosionSound" type="audio/mpeg"></audio>
     </div>
 
     <main class="main">
@@ -38,10 +29,13 @@
                 Canvas.</canvas>
         </div>
 
+        <!-- Animação inicial (nave e texto surgem) -->
         <div class="initialAnimation">
             <img src="./img/nave.png" alt="" class=" nave slide-in-bottom floating">
             <p class="focus-in-expand font">ASTEROIDS</p>
         </div>
+
+        <!-- Componentes texto que aparecem durante o jogo (indicadores) -->
 
         <div class="highScore">
             <p id="highScoreValue"></p>
@@ -52,6 +46,9 @@
         <div class="lives">
             <p id="livesValue"></p>
         </div>
+
+        <!-- Menu start, que surge no inicio, com opções para o jogador -->
+
         <menu id="startMenu">
             <div class="firstContainer">
                 <div class="container">
@@ -76,14 +73,17 @@
                     </div>
                 </div>
             </div>
-
         </menu>
 
-
+        <!-- Caso o jogador deseje ver e ajustar, o menu options surgirá em forma de dialog, com a opção de ajustar dois tipos de volume e alterar o estilo em que deseja jogar -->
         <dialog id="menuOptions">
             <section>
-                <h3 id="closeModalButton" onclick="functionModal()" style="margin: 10px; display: flex; justify-content: end; cursor: pointer;">X</h3>
+                <!-- Cabeçalho da dialog -->
+                <h3 id="closeModalButton" onclick="functionModal()"
+                    style="margin: 10px; display: flex; justify-content: end; cursor: pointer;">X</h3>
                 <h1 id="optionsTitle">Options</h1>
+
+                <!-- Controlo dos sons -->
                 <div class="sounds">
                     <h3>Music volume</h3>
                     <div class="slidecontainer">
@@ -93,14 +93,16 @@
                 <div class="sounds">
                     <h3>Sound effects</h3>
                     <div class="slidecontainer">
-                        <input type="range" min="1" max="100" value="50" class="slider" id="soundRange" oninput="changeMusicVolume(this.value)">
+                        <input type="range" min="1" max="100" value="50" class="slider" id="soundRange"
+                            oninput="changeMusicVolume(this.value)">
                     </div>
                 </div>
+                <!-- Escolha entre três estilos diferentes -->
                 <div id="chooseStyle">
                     <h3 style="text-align:center">Style</h3>
                     <div class="slideshow-container">
 
-                        <!-- Full-width images with number and caption text -->
+                        <!-- Especie de carrosel com as opções -->
                         <div class="mySlides fade contentInsideMenu">
                             <img src="img/nave.png" style="width:200px">
                             <div class="text">Pixel</div>
@@ -110,7 +112,8 @@
                         </div>
 
                         <div class="mySlides fade contentInsideMenu" style="margin-top:20px">
-                            <img src="img/Nave com fogo-tema original.png" style="width:200px; margin-bottom:40px; margin-right:130px">
+                            <img src="img/Nave com fogo-tema original.png"
+                                style="width:200px; margin-bottom:40px; margin-right:130px">
                             <div class="text">Clássico</div>
                             <div class="btn" style="top: 20px; left: 183px;" onclick="changeShipClassico()">
                                 <h4>Select</h4>
@@ -125,8 +128,9 @@
                             </div>
                         </div>
 
-                        <!-- Next and previous buttons -->
-                        <div class="slidebtns" style="    display: flex; justify-content: space-between; bottom: 160px; position: relative;">
+                        <!-- Botões de próximo e anterior -->
+                        <div class="slidebtns"
+                            style="display: flex; justify-content: space-between; bottom: 160px; position: relative;">
                             <button class="prev" onclick="plusSlides(-1)">&#10094;</button>
                             <button class="next" onclick="plusSlides(1)">&#10095;</button>
                         </div>
@@ -137,6 +141,7 @@
         </dialog>
 
 
+        <!-- Menu que surge caso as vidas do jogador se esgotem -->
         <div class="gameOver">
             <img src="./img/gameover.png" alt="">
             <div class="firstContainer">
@@ -164,9 +169,6 @@
             </div>
         </div>
     </main>
-
-    
-
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="js/script.js"></script>

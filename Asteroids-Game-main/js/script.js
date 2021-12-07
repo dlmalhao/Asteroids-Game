@@ -1,50 +1,53 @@
-//Variables
+//Definiçao de todas as variaveis que serão necessárias
 
 const canvas = document.querySelector("#canvas");
 const ctx = canvas.getContext("2d");
 var background = new Image();
 let width = canvas.width
 let height = canvas.height
+
 let startMenu = document.querySelector("#startMenu")
 let startButton = document.querySelector("#startButton")
+
 let highScore = getHighScore()
 let lives = 3
 let score = 0
+
 let asteroids = []
-let aliens=[]
+let aliens = []
 let sizes = [200, 150, 100]
 let urls = ["./img/asteroid.png", "./img/asteroid2.png"]
 let bullets = []
+
 let isGameOver = false
 let isStartingAgain = false
 let rndX, rndY, rndSize, rndImg
 let canShoot = true
 let shooted = false
-let scoreAlien=1
+let scoreAlien = 1
 let shipSrc = "./img/naveSemFogo.png"
 let shipMovingSrc = "./img/nave.png"
 let backgroundSrc = "./img/fundo.jpg"
 let ovniSrc = "./img/alien.png"
+
 var allBtnsText = document.getElementsByTagName("h4")
 
 
-/* Sounds used in the game */
+/* Os sons usados e o começo da musica */
 
 let initialMusic = document.getElementById("initialMusic")
 let shootingSound = document.getElementById("gunshotSound")
+let explosionSound = document.getElementById("explosionSound")
 
 initialMusic.play()
 
 
-
+/* Desenho direito do fundo */
 
 background.src = backgroundSrc;
 background.onload = function () {
-ctx.drawImage(background, 0, 0)
+    ctx.drawImage(background, 0, 0)
 }
-
-
-
 
 canvas.width = window.innerWidth
 canvas.height = window.innerHeight
@@ -52,35 +55,31 @@ canvas.height = window.innerHeight
 function renderBackground() {
     background.src = backgroundSrc;
     background.onload = function () {
-    ctx.drawImage(background, 0, 0)
+        ctx.drawImage(background, 0, 0)
     }
 }
 
-
-
-startButton.onclick = function () {
-    renderBackground()
-    fadeOut(startMenu)
-}
-
-
-
-
-//Resize
+//Fazer o resize
 window.addEventListener("resize", function () {
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
 })
 
 
-//Functions
+
+/* O que acontece no clique do start */
+startButton.onclick = function () {
+    renderBackground()
+    fadeOut(startMenu)
+}
 
 
+//Funções utilizadas
 
-//Mudar o tema do jogo
+//Mudar o tema do jogo - pixel
 function changeShipPixel() {
     shipSrc = "./img/naveSemFogo.png"
-    shipMovingSrc ="./img/nave.png"
+    shipMovingSrc = "./img/nave.png"
     backgroundSrc = "./img/fundo.jpg"
     urls = ["./img/asteroid.png", "./img/asteroid2.png"]
     ovniSrc = "./img/alien.png"
@@ -99,33 +98,35 @@ function changeShipPixel() {
     }
 }
 
-
+//Mudar o tema do jogo - tema original
 function changeShipClassico() {
     shipSrc = "./img/Tema 2/nave.png"
-    shipMovingSrc ="./img/Tema 2/nave com fogo.png"
+    shipMovingSrc = "./img/Tema 2/nave com fogo.png"
     backgroundSrc = "./img/Tema 2/Fundo.png"
     urls = ["./img/Tema 2/Asteroid.png"]
     ovniSrc = "./img/Tema 2/Ovni.png"
-    
+
 
     for (let element of allBtnsText) {
         element.closest("div").style.backgroundColor = "black"
         element.closest("div").style.border = "white"
 
         $(element).closest("div").hover(
-            function() {
+            function () {
                 $(this).addClass("selected")
-            }, function() {
+            },
+            function () {
                 $(this).removeClass("selected")
             }
-        );        
+        );
     }
 }
 
+//Mudar o tema do jogo - realista
 
 function changeShipRealista() {
     shipSrc = "./img/Tema 3/Nave.png"
-    shipMovingSrc ="./img/Tema 3/Nave com fogo.png"
+    shipMovingSrc = "./img/Tema 3/Nave com fogo.png"
     backgroundSrc = "./img/Tema 3/Fundo.png"
     urls = ["./img/Tema 3/asteroid.png", "./img/Tema 3/asteroid2.png"]
     ovniSrc = "./img/Tema 3/ovni.png"
@@ -135,26 +136,29 @@ function changeShipRealista() {
         element.closest("div").style.backgroundColor = "black"
         element.closest("div").style.border = "white"
 
+        /* Indica que é este o selecionado */
+
         $(element).closest("div").hover(
-            function() {
+            function () {
                 $(this).addClass("selected")
-            }, function() {
+            },
+            function () {
                 $(this).removeClass("selected")
             }
-        );        
+        );
     }
 }
 
 
 
-//return do valor do highScore
+//return (vai buscar) do valor do highScore
 function getHighScore() {
     return localStorage.getItem("HighScore")
 }
 
 //Fade Out
 function fadeOut(element) {
-    var op = 1; // initial opacity
+    var op = 1; // opacidade inicial
     var timer = setInterval(function () {
         if (op <= 0.1) {
             clearInterval(timer);
@@ -272,87 +276,87 @@ function drawAsteroid() {
 }
 
 //Criação dos aliens
-function createAlien(){
-        rndX = getRandomX()
-        rndY = getRandomY()
+function createAlien() {
+    rndX = getRandomX()
+    rndY = getRandomY()
 
-        if(aliens.length == 0){
-            aliens.push({
-                img: new Image(),
-                src: ovniSrc,
-                size:100,
-                velocity:5,
-                direction:{
-                    x: randomDirection(-1, 1),
-                    y: randomDirection(-1, 1)
-                },
-                coordinates: {
-                    x: rndX,
-                    y: rndY
-                },
-                angle: 0,
-                isAlive: false,
+    if (aliens.length == 0) {
+        aliens.push({
+            img: new Image(),
+            src: ovniSrc,
+            size: 100,
+            velocity: 5,
+            direction: {
+                x: randomDirection(-1, 1),
+                y: randomDirection(-1, 1)
+            },
+            coordinates: {
+                x: rndX,
+                y: rndY
+            },
+            angle: 0,
+            isAlive: false,
 
-            })
-        }
+        })
+    }
 
-        // if (distanceBetweenTwoPoints(rndX, rndY, ship.coordinates.x, ship.coordinates.y) > 300) {
-           
-        // }
-        
+    // if (distanceBetweenTwoPoints(rndX, rndY, ship.coordinates.x, ship.coordinates.y) > 300) {
+
+    // }
+
 }
 
 
 
 //Desenho dos Aliens
-function drawAlien(){
-    if(aliens[0].isAlive ){
-        
+function drawAlien() {
+    if (aliens[0].isAlive) {
+
         ctx.save()
         ctx.translate(aliens[0].coordinates.x, aliens[0].coordinates.y)
         ctx.rotate(aliens[0].angle * Math.PI / 500)
         aliens[0].img.src = aliens[0].src
         ctx.drawImage(aliens[0].img, -(aliens[0].size / 2), -(aliens[0].size / 2), aliens[0].size, aliens[0].size)
         ctx.restore()
-        
-        
-        
-        
-        
+
+
+
+
+
     }
-    if(score >= scoreAlien*2000 ){
+    if (score >= scoreAlien * 2000) {
         scoreAlien++
         aliens[0].isAlive = true
     }
-        aliens[0].angle++
+    aliens[0].angle++
+
+    aliens[0].coordinates.x += aliens[0].direction.x * (aliens[0].velocity / 2)
+    aliens[0].coordinates.y += aliens[0].direction.y * (aliens[0].velocity / 2)
+
+    if (randomDirection(1, 100) > 98) {
+        aliens[0].direction.x = randomDirection(-1, 1)
+        aliens[0].direction.y = randomDirection(-1, 1)
 
         aliens[0].coordinates.x += aliens[0].direction.x * (aliens[0].velocity / 2)
         aliens[0].coordinates.y += aliens[0].direction.y * (aliens[0].velocity / 2)
+    }
 
-        if(randomDirection(1, 100)> 98){
-            aliens[0].direction.x = randomDirection(-1,1)
-            aliens[0].direction.y = randomDirection(-1,1)
+    //Verificação das bordas
+    if (aliens[0].coordinates.x >= canvas.width + (aliens[0].size / 2)) {
+        aliens[0].coordinates.x = -(aliens[0].size / 2)
+    }
+    if (aliens[0].coordinates.y >= canvas.height + (aliens[0].size / 2)) {
+        aliens[0].coordinates.y = -(aliens[0].size / 2)
+    }
+    if (aliens[0].coordinates.x < -(aliens[0].size / 2)) {
+        aliens[0].coordinates.x = canvas.width + (aliens[0].size / 2)
+    }
+    if (aliens[0].coordinates.y < -(aliens[0].size / 2)) {
+        aliens[0].coordinates.y = canvas.height + (aliens[0].size / 2)
+    }
 
-            aliens[0].coordinates.x += aliens[0].direction.x * (aliens[0].velocity / 2)
-            aliens[0].coordinates.y += aliens[0].direction.y * (aliens[0].velocity / 2)
-        }
 
-        //Verificação das bordas
-        if (aliens[0].coordinates.x >= canvas.width + (aliens[0].size / 2)) {
-            aliens[0].coordinates.x = -(aliens[0].size / 2)
-        }
-        if (aliens[0].coordinates.y >= canvas.height + (aliens[0].size / 2)) {
-            aliens[0].coordinates.y = -(aliens[0].size / 2)
-        }
-        if (aliens[0].coordinates.x < -(aliens[0].size / 2)) {
-            aliens[0].coordinates.x = canvas.width + (aliens[0].size / 2)
-        }
-        if (aliens[0].coordinates.y < -(aliens[0].size / 2)) {
-            aliens[0].coordinates.y = canvas.height + (aliens[0].size / 2)
-        }
 
-    
-    
 }
 
 
@@ -410,7 +414,7 @@ function drawShip() {
             ship.coordinates.x += ship.velocity * Math.cos(ship.angle - Math.PI / 2)
         }
     }
-
+   /*  Viragens criadas atraves de angulos */
 
     if (ship.isTurningLeft) {
         ship.angle -= 0.1
@@ -435,6 +439,7 @@ function drawShip() {
     }
 }
 
+/* Criação de explosão */
 
 let explosion = {
     img: new Image(),
@@ -449,26 +454,27 @@ let explosion = {
 explosion.img.src = "./img/explosion.png"
 
 
-function drawExplosion () {
-    if(explosion.isExploding == true) {
+function drawExplosion() {
+    if (explosion.isExploding == true) {
 
         ctx.save()
         ctx.translate(explosion.coordinates.x, explosion.coordinates.y)
         ctx.rotate(explosion.angle)
-        ctx.drawImage(explosion.img, -explosion.size/2, -explosion.size/2, explosion.size, explosion.size)
+        ctx.drawImage(explosion.img, -explosion.size / 2, -explosion.size / 2, explosion.size, explosion.size)
         ctx.restore()
 
-        setTimeout (()=>{
+        setTimeout(() => {
             explosion.angle = 180
-        },50) 
+        }, 50)
 
-        setTimeout (()=>{
+        setTimeout(() => {
             explosion.angle = 0
-        },100) 
+        }, 100)
 
         setTimeout(() => {
             explosion.isExploding = false
         }, 150);
+        explosionSound.play()
     }
 }
 
@@ -484,18 +490,18 @@ function explodeShip() {
             if (lives == 1) {
                 lives = 0
                 isGameOver = true
-                
-            }
-            else {
+
+            } else {
                 //Ao bater contra um asteroid, se houver algum que esteja dentro de um raio de 300px do centro, este vai ser removido.(Vai ser criado outro automaticamente)
                 if (distanceBetweenTwoPoints(asteroids[i].coordinates.x, asteroids[i].coordinates.y, canvas.width / 2, canvas.height / 2) < 300) {
                     asteroids.splice(i, 1)
+                    
                 }
-
                 ship.velocity = 0
                 ship.coordinates.x = canvas.width / 2
                 ship.coordinates.y = canvas.height / 2
                 drawShip()
+                
                 if (lives > 0) {
                     lives -= 1
                 }
@@ -503,17 +509,14 @@ function explodeShip() {
         }
     }
 
-    if(aliens[0].isAlive) {
-        if(distanceBetweenTwoPoints(ship.coordinates.x, ship.coordinates.y, aliens[0].coordinates.x, aliens[0].coordinates.y) < ship.size / 4 + aliens[0].size / 2){
+    if (aliens[0].isAlive) {
+        if (distanceBetweenTwoPoints(ship.coordinates.x, ship.coordinates.y, aliens[0].coordinates.x, aliens[0].coordinates.y) < ship.size / 4 + aliens[0].size / 2) {
             if (lives == 1) {
-
                 isGameOver = true
-
             }
 
             //Ao bater contra um alien, se houver algum que esteja dentro de um raio de 300px do centro, este vai ser removido.(Vai ser criado outro automaticamente)
             if (distanceBetweenTwoPoints(aliens[0].coordinates.x, aliens[0].coordinates.y, canvas.width / 2, canvas.height / 2) < 300) {
-
                 aliens[0].isAlive = false;
             }
 
@@ -526,10 +529,11 @@ function explodeShip() {
             }
         }
     }
+    
 }
 
 
-//Game over
+//Jogo terminado
 function gameOver() {
 
     if (isGameOver) {
@@ -562,7 +566,7 @@ function startAgain() {
 }
 
 
-//Back to Menu (Reload)
+//Voltar ao Menu (Reload)
 function reload() {
     window.location.reload()
 }
@@ -633,21 +637,21 @@ function drawBullets() {
                 //Se a bala bater no asteroid, este vai ser removido do array
                 if (distanceBetweenTwoPoints(bullets[i].coordinates.x, bullets[i].coordinates.y, asteroids[j].coordinates.x, asteroids[j].coordinates.y) < bullets[i].size / 4 + asteroids[j].size / 2) {
                     explosion.coordinates.x = asteroids[j].coordinates.x
-                    explosion.coordinates.y = asteroids[j].coordinates.y               
+                    explosion.coordinates.y = asteroids[j].coordinates.y
                     explosion.isExploding = true
                     asteroids.splice(j, 1)
-                    idxFound= i 
+                    idxFound = i
                     score += 200
                     shooted = false
                     break
                 }
             }
 
-            if(aliens[0].isAlive){
+            if (aliens[0].isAlive) {
                 if (distanceBetweenTwoPoints(bullets[i].coordinates.x, bullets[i].coordinates.y, aliens[0].coordinates.x, aliens[0].coordinates.y) < bullets[i].size / 4 + aliens[0].size / 2) {
                     // aliens.splice(0, 1)
-                    bullets.splice(i,1)
-                    idxFound= i 
+                    bullets.splice(i, 1)
+                    idxFound = i
                     aliens[0].isAlive = false
                     shooted = false
                     score += 500
@@ -655,11 +659,11 @@ function drawBullets() {
                 }
             }
 
-            if(new Date().getTime() - bullets[i].date.getTime() >2000){
+            if (new Date().getTime() - bullets[i].date.getTime() > 2000) {
                 idxFound = i
             }
 
-            if(idxFound != null) {
+            if (idxFound != null) {
                 bullets.splice(idxFound, 1)
             }
         }
@@ -732,9 +736,10 @@ function setHighScore() {
     document.querySelector("#highScoreValue").innerHTML = "High Score: " + highScore
 }
 
+/* Funções que permitem ao carrosel funcionar */
 
 
-var slideIndex = 1;
+let slideIndex = 1;
 showSlides(slideIndex);
 
 // Next/previous controls
@@ -748,20 +753,15 @@ function currentSlide(n) {
 }
 
 function showSlides(n) {
-    var i;
-    var slides = document.getElementsByClassName("mySlides");
-    var dots = document.getElementsByClassName("dot");
+    let slides = document.getElementsByClassName("mySlides");
     if (n > slides.length) {
         slideIndex = 1
     }
     if (n < 1) {
         slideIndex = slides.length
     }
-    for (i = 0; i < slides.length; i++) {
+    for (let i = 0; i < slides.length; i++) {
         slides[i].style.display = "none";
-    }
-    for (i = 0; i < dots.length; i++) {
-        dots[i].className = dots[i].className.replace(" active", "");
     }
     slides[slideIndex - 1].style.display = "block";
 
@@ -788,6 +788,8 @@ function functionModal() {
     })
 }
 
+
+/* Função para alterar o volume da musica */
 function changeMusicVolume(musicVolume) {
     console.log(musicVolume)
 

@@ -1,0 +1,131 @@
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
+
+
+html {
+    width: 100%;
+    height: 100%;
+    
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: "Press Start 2P", cursive;
+}
+
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+/* Container canvas alinhado de modo a ocupar todo o ecrã */
+
+body .canvas {
+    position: relative;
+    transform: translateY(-50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+
+main {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+.canvasContainer {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+
+/* Estilização dos botoes */
+.btn {
+    margin-bottom: 20%;
+    width: 100%;
+    transition: 0.25s;
+    background: none;
+}
+
+.btn {
+    height: 60px;
+    width: 250px;
+    display: flex;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.8s ease;
+    position: relative;
+    border: 1px solid rgb(237, 192, 255);
+    background-color: #500243;
+    margin: 0 40px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+        rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+    overflow: hidden;
+    transition: all 300ms ease;
+}
+
+.btn::before,
+.btn::after {
+    position: absolute;
+    display: block;
+    content: "";
+    width: 100%;
+    height: 100%;
+}
+
+.btn h3 {
+    color: #fff;
+}
+
+.btn:after {
+    width: 300%;
+    height: 300%;
+    left: -300%;
+    transform: rotate(45deg);
+    background-color: rgb(237, 192, 255);
+    transition: all 300ms ease;
+}
+
+.btn.selected:after {
+    width: 300%;
+    height: 300%;
+    left: -300%;
+    transform: rotate(45deg);
+    background-color: rgb(255, 255, 255);
+    transition: all 300ms ease;
+}
+
+.btn:hover h3 {
+    color: #500243;
+    z-index: 10;
+    font-weight: 600;
+}
+
+.btn.selected:hover h3 {
+    color: #000000;
+    z-index: 10;
+    font-weight: 600;
+}
+
+.btn:hover::after {
+    left: -100%;
+}
+
+.btn:hover {
+    border: 2px solid #500243;
+    transform: translateX(1px);
+}
+
+.btn:active {
+    transform: scale(80%);
+}
