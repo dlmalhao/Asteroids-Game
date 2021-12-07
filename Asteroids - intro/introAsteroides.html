@@ -2,38 +2,44 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="./img/asteroid.png" type="image/x-icon">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="./img/asteroid.png" type="image/x-icon" />
     <title>ASTEROIDS</title>
 </head>
 
 <body>
+    <!-- div que vai permitir a inserção da música e dos sons na introdução -->
     <div>
-        <audio id="initialMusic" >
-            <source src="./mp3/Space Oddity (8-Bits).mp3"type="audio/mpeg">
+        <audio id="initialMusic">
+            <source src="./mp3/Space Oddity (8-Bits).mp3" type="audio/mpeg" />
         </audio>
         <audio src="./mp3/asteroid.mp3" id="asteroidSound" type="audio/mpeg"></audio>
         <audio src="./mp3/Explosion.mp3" id="explosionSound" type="audio/mpeg"></audio>
         <audio src="./mp3/Gunshot.mp3" id="gunshotSound" type="audio/mpeg"></audio>
         <audio src="./mp3/UFO noise.mp3" id="ufoSound" type="audio/mpeg"></audio>
     </div>
-    
+
     <main>
         <div class="canvasContainer">
+            <!-- os svgs no nosso projeto não funcionaram, por isso optamos por utilizar pngs -->
+            <!-- todos os elementos foram desenhados por nós -->
             <!-- <embed src="img/fundo.svg" alt="" id="background"> -->
-            <canvas id="canvas" style="background-color: rgb(132, 69, 143);"> Your browser does not support HTML5
-                Canvas.</canvas>
+            <canvas id="canvas" style="background-color: rgb(132, 69, 143)">
+                Your browser does not support HTML5 Canvas.</canvas>
         </div>
 
+
+        <!-- Container divs com os elementos que fazem parte das animações -->
+
         <div class="containerAlien">
-            <img src="img/alien.png" class="alien">
+            <img src="img/alien.png" class="alien" />
         </div>
 
         <div class="containerAsteroid">
-            <img src="img/asteroid.png" class="asteroid">
+            <img src="img/asteroid.png" class="asteroid" />
         </div>
 
         <div class="explosionNum1">
@@ -44,7 +50,6 @@
             <div class="shot"></div>
         </div>
     </main>
-
 
     <script src="script.js"></script>
 </body>

@@ -1,7 +1,10 @@
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
+
+/* Definição do tipo de letra e ajustar o ecrã para que todo o espaço seja utilizado */
 html {
   width: 100%;
   height: 100%;
-  font-family: "Montserrat", sans-serif;
+  font-family: "Press Start 2P", cursive;
 }
 
 * {
@@ -18,6 +21,8 @@ body {
   overflow: hidden;
 }
 
+/* Ajuste e alinhamento dos elementos na main */
+
 main {
   width: 100%;
   height: 100%;
@@ -25,6 +30,8 @@ main {
   justify-content: center;
   align-items: center;
 }
+
+/* Container canvas alinhado de modo a ocupar todo o ecrã */
 
 body .canvas {
   position: relative;
@@ -41,6 +48,9 @@ body .canvas {
   position: absolute;
 }
 
+/* Definidas as animações dentro do próprio elemento e não no seu container */
+
+/* Asteroide */
 .containerAsteroid {
   display: flex;
   align-items: center;
@@ -52,10 +62,11 @@ body .canvas {
   position: absolute;
   width: 450px;
   animation: enterScreen 5s ease-in-out 0s 1 normal forwards,
-    float 5s ease-in-out 5s infinite normal forwards, byebye 7.2s normal forwards;
+    float 5s ease-in-out 5s infinite normal forwards,
+    byebye 7.2s normal forwards;
 }
 
-
+/* Alienigena */
 .alien {
   opacity: 0;
   position: absolute;
@@ -63,6 +74,7 @@ body .canvas {
   animation: appear 3s ease 4s 1 normal forwards, byebye 7.2s normal forwards;
 }
 
+/* Os quadrados que dão origem à explosão */
 .explosionNum1 {
   opacity: 0;
   border: 8px solid #a4243b;
@@ -72,22 +84,6 @@ body .canvas {
   background-color: #a4243b;
   position: absolute;
   animation: exist 1s ease-out 7.22s 1 normal forwards;
-}
-
-.containerShot {
-  position: absolute;
-  opacity: 1;
-}
-
-.shot {
-  height: 10px;
-  width: 10px;
-  opacity: 0;
-  border-radius: 50%;
-  background-color: #e8b100;
-  margin-left: auto;
-  margin-right: auto;
-  animation: shot 0.2s linear 6.8s 1 normal forwards,  byebye 7.2s normal forwards;
 }
 
 .explosionNum2 {
@@ -105,6 +101,27 @@ body .canvas {
   animation: existNum2 1s ease-out 7.22s normal forwards;
 }
 
+/* Container que posiciona o tiro e a criação do mesmo */
+.containerShot {
+  position: absolute;
+  opacity: 1;
+}
+
+.shot {
+  height: 10px;
+  width: 10px;
+  opacity: 0;
+  border-radius: 50%;
+  background-color: #e8b100;
+  margin-left: auto;
+  margin-right: auto;
+  animation: shot 0.2s linear 6.8s 1 normal forwards,
+    byebye 7.2s normal forwards;
+}
+
+/* Todas as animações foram realizadas usando keyframes que mexem na escala, translação e opacidade/visibilidade dos objetos */
+
+/* Keyframes da animação que permite o surgimento das explosões */
 @keyframes exist {
   0% {
     opacity: 1;
@@ -133,6 +150,7 @@ body .canvas {
   }
 }
 
+/* Asteroide entra no ecrã e fica a flutuar */
 @keyframes enterScreen {
   0% {
     opacity: 0;
@@ -144,6 +162,8 @@ body .canvas {
     transform: translateY(-30px) rotate(0deg);
   }
 }
+
+/* Várias translações pequenas dão o efeito de flutuar */
 
 @keyframes float {
   0% {
@@ -171,6 +191,8 @@ body .canvas {
   }
 }
 
+/* Alien aparece por detrás do asteroide */
+
 @keyframes appear {
   0% {
     opacity: 0;
@@ -183,17 +205,7 @@ body .canvas {
   }
 }
 
-@keyframes slideAndExplode {
-  0% {
-    opacity: 0;
-    transform: translateY(350px);
-  }
-
-  100% {
-    opacity: 1;
-    transform: translateY(100px);
-  }
-}
+/* Animação que permite o tiro que explode tudo */
 
 @keyframes shot {
   0% {
@@ -207,7 +219,7 @@ body .canvas {
   }
 }
 
-
+/* Animação que retira todos os objetos do ecrã */
 @keyframes byebye {
   0% {
     visibility: show;
