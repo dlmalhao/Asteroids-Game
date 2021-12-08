@@ -87,14 +87,13 @@
                 <div class="sounds">
                     <h3>Music volume</h3>
                     <div class="slidecontainer">
-                        <input type="range" min="1" max="100" value="50" class="slider" id="musicRange">
+                        <input type="range" min="1" max="100" value="50" class="slider" id="musicRange" oninput="changeMusicVolume(this.value)">
                     </div>
                 </div>
                 <div class="sounds">
                     <h3>Sound effects</h3>
                     <div class="slidecontainer">
-                        <input type="range" min="1" max="100" value="50" class="slider" id="soundRange"
-                            oninput="changeMusicVolume(this.value)">
+                        <input type="range" min="1" max="100" value="50" class="slider" id="soundRange" oninput="changeSoundVolume(this.value)">
                     </div>
                 </div>
                 <!-- Escolha entre três estilos diferentes -->

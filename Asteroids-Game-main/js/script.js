@@ -1,24 +1,20 @@
-//Definiçao de todas as variaveis que serão necessárias
+                                                                 //Definiçao de todas as variaveis que serão necessárias
 
 const canvas = document.querySelector("#canvas");
 const ctx = canvas.getContext("2d");
 var background = new Image();
 let width = canvas.width
 let height = canvas.height
-
 let startMenu = document.querySelector("#startMenu")
 let startButton = document.querySelector("#startButton")
-
 let highScore = getHighScore()
 let lives = 3
 let score = 0
-
 let asteroids = []
 let aliens = []
 let sizes = [200, 150, 100]
 let urls = ["./img/asteroid.png", "./img/asteroid2.png"]
 let bullets = []
-
 let isGameOver = false
 let isStartingAgain = false
 let rndX, rndY, rndSize, rndImg
@@ -29,21 +25,17 @@ let shipSrc = "./img/naveSemFogo.png"
 let shipMovingSrc = "./img/nave.png"
 let backgroundSrc = "./img/fundo.jpg"
 let ovniSrc = "./img/alien.png"
-
 var allBtnsText = document.getElementsByTagName("h4")
 
 
 /* Os sons usados e o começo da musica */
-
 let initialMusic = document.getElementById("initialMusic")
 let shootingSound = document.getElementById("gunshotSound")
 let explosionSound = document.getElementById("explosionSound")
-
 initialMusic.play()
 
 
 /* Desenho direito do fundo */
-
 background.src = backgroundSrc;
 background.onload = function () {
     ctx.drawImage(background, 0, 0)
@@ -65,16 +57,13 @@ window.addEventListener("resize", function () {
     canvas.height = window.innerHeight
 })
 
-
-
 /* O que acontece no clique do start */
 startButton.onclick = function () {
     renderBackground()
     fadeOut(startMenu)
 }
 
-
-//Funções utilizadas
+                                                                          //Funções utilizadas
 
 //Mudar o tema do jogo - pixel
 function changeShipPixel() {
@@ -123,7 +112,6 @@ function changeShipClassico() {
 }
 
 //Mudar o tema do jogo - realista
-
 function changeShipRealista() {
     shipSrc = "./img/Tema 3/Nave.png"
     shipMovingSrc = "./img/Tema 3/Nave com fogo.png"
@@ -131,13 +119,15 @@ function changeShipRealista() {
     urls = ["./img/Tema 3/asteroid.png", "./img/Tema 3/asteroid2.png"]
     ovniSrc = "./img/Tema 3/ovni.png"
 
-
+    // Vai buscar todos os textos dos botões
     for (let element of allBtnsText) {
+
+        //Para cada texto, modificamos o style do parente
         element.closest("div").style.backgroundColor = "black"
         element.closest("div").style.border = "white"
 
-        /* Indica que é este o selecionado */
-
+        //Não sabiamos se JQuery era permitido, mas só o usamos para estilizar o "Hover" de cada botão pois não encontramos outra solução
+        //Estiliza os botões ao passar o rato por cima
         $(element).closest("div").hover(
             function () {
                 $(this).addClass("selected")
@@ -149,14 +139,12 @@ function changeShipRealista() {
     }
 }
 
-
-
-//return (vai buscar) do valor do highScore
+//return do valor do highScore
 function getHighScore() {
     return localStorage.getItem("HighScore")
 }
 
-//Fade Out
+//Fade Out usado nos botões e no menu com o intuito de ter uma transição mais suave
 function fadeOut(element) {
     var op = 1; // opacidade inicial
     var timer = setInterval(function () {
@@ -164,15 +152,14 @@ function fadeOut(element) {
             clearInterval(timer);
             element.style.display = 'none';
             document.querySelector(".initialAnimation").style.visibility = "hidden"
-
             render()
         }
+
         element.style.opacity = op;
         element.style.filter = 'alpha(opacity=' + op * 100 + ")";
         op -= op * 0.1;
     }, 50)
 }
-
 
 //Criação dos asteroids
 function createAsteroid(num) {
@@ -182,6 +169,7 @@ function createAsteroid(num) {
             rndY = getRandomY()
             rndSize = sizes[Math.floor(Math.random() * sizes.length)]
             rndImg = urls[Math.floor(Math.random() * urls.length)]
+            //Exclui os asteroids que vão nascer num raio menor do que 300 px da nave
             if (distanceBetweenTwoPoints(rndX, rndY, ship.coordinates.x, ship.coordinates.y) > 300) {
                 asteroids.push({
                     img: new Image(),
@@ -189,8 +177,8 @@ function createAsteroid(num) {
                     size: rndSize,
                     velocity: 2,
                     direction: {
-                        x: randomDirection(-1, 1),
-                        y: randomDirection(-1, 1)
+                        x: randomNumberBetween(-1, 1),
+                        y: randomNumberBetween(-1, 1)
                     },
                     coordinates: {
                         x: rndX,
@@ -200,20 +188,15 @@ function createAsteroid(num) {
                 })
             }
         }
-    } else {
-        rndX = getRandomX()
-        rndY = getRandomY()
-    }
+    } 
 
-    //Caso o nº de asteroides seja inferior ao num vai adicionar com os dados random e a uma distância de pelo menos 300px da nave
-
+    //Visto que esta função está dentro do render, vai estar constantemente a verificar se algum asteroid é destruido (removido do array)
+    //Se isso acontecer, vai ser criado um novo
     if (asteroids.length < num) {
-
         rndX = getRandomX()
         rndY = getRandomY()
         rndSize = sizes[Math.floor(Math.random() * sizes.length)]
         rndImg = urls[Math.floor(Math.random() * urls.length)]
-
         if (distanceBetweenTwoPoints(rndX, rndY, ship.coordinates.x, ship.coordinates.y) > 300) {
             asteroids.push({
                 img: new Image(),
@@ -221,8 +204,8 @@ function createAsteroid(num) {
                 size: rndSize,
                 velocity: 2,
                 direction: {
-                    x: randomDirection(-1, 1),
-                    y: randomDirection(-1, 1)
+                    x: randomNumberBetween(-1, 1),
+                    y: randomNumberBetween(-1, 1)
                 },
                 coordinates: {
                     x: rndX,
@@ -234,12 +217,9 @@ function createAsteroid(num) {
     }
 }
 
-//Desenho dos asteroids
+//Desenho dos asteroids no canvas
 function drawAsteroid() {
     for (const asteroid of asteroids) {
-        // if (distanceBetweenTwoPoints(asteroid.coordinates.x, asteroid.coordinates.y, ship.coordinates.x, ship.coordinates.y) < 300) {
-
-        // }
         ctx.save()
         ctx.translate(asteroid.coordinates.x, asteroid.coordinates.y)
         ctx.rotate(asteroid.angle * Math.PI / 500)
@@ -248,16 +228,12 @@ function drawAsteroid() {
         ctx.restore()
 
         asteroid.angle++
-
         asteroid.coordinates.x += asteroid.direction.x * (asteroid.velocity / 2)
         asteroid.coordinates.y += asteroid.direction.y * (asteroid.velocity / 2)
 
-        asteroid.velocity += 0.002
-
-
-
-
-
+        //Esta é a nossa forma de dificultar um bocado o jogo.
+        //A velocidade dos asteroids vai aumentando aos poucos
+        asteroid.velocity += 0.003
 
         //Verificação das bordas
         if (asteroid.coordinates.x >= canvas.width + (asteroid.size / 2)) {
@@ -287,8 +263,8 @@ function createAlien() {
             size: 100,
             velocity: 5,
             direction: {
-                x: randomDirection(-1, 1),
-                y: randomDirection(-1, 1)
+                x: randomNumberBetween(-1, 1),
+                y: randomNumberBetween(-1, 1)
             },
             coordinates: {
                 x: rndX,
@@ -299,44 +275,31 @@ function createAlien() {
 
         })
     }
-
-    // if (distanceBetweenTwoPoints(rndX, rndY, ship.coordinates.x, ship.coordinates.y) > 300) {
-
-    // }
-
 }
 
-
-
-//Desenho dos Aliens
+//Desenho dos Aliens no canvas
 function drawAlien() {
     if (aliens[0].isAlive) {
-
         ctx.save()
         ctx.translate(aliens[0].coordinates.x, aliens[0].coordinates.y)
         ctx.rotate(aliens[0].angle * Math.PI / 500)
         aliens[0].img.src = aliens[0].src
         ctx.drawImage(aliens[0].img, -(aliens[0].size / 2), -(aliens[0].size / 2), aliens[0].size, aliens[0].size)
         ctx.restore()
-
-
-
-
-
     }
     if (score >= scoreAlien * 2000) {
         scoreAlien++
         aliens[0].isAlive = true
     }
-    aliens[0].angle++
 
+    aliens[0].angle++
     aliens[0].coordinates.x += aliens[0].direction.x * (aliens[0].velocity / 2)
     aliens[0].coordinates.y += aliens[0].direction.y * (aliens[0].velocity / 2)
 
-    if (randomDirection(1, 100) > 98) {
-        aliens[0].direction.x = randomDirection(-1, 1)
-        aliens[0].direction.y = randomDirection(-1, 1)
-
+    //Alien com 2% de probabilidade de mudar de direção
+    if (randomNumberBetween(1, 100) > 98) {
+        aliens[0].direction.x = randomNumberBetween(-1, 1)
+        aliens[0].direction.y = randomNumberBetween(-1, 1)
         aliens[0].coordinates.x += aliens[0].direction.x * (aliens[0].velocity / 2)
         aliens[0].coordinates.y += aliens[0].direction.y * (aliens[0].velocity / 2)
     }
@@ -354,15 +317,9 @@ function drawAlien() {
     if (aliens[0].coordinates.y < -(aliens[0].size / 2)) {
         aliens[0].coordinates.y = canvas.height + (aliens[0].size / 2)
     }
-
-
-
 }
 
-
-
 //Criar a nave
-
 let ship = {
     img: new Image(),
     size: 100,
@@ -379,10 +336,7 @@ let ship = {
     isShooting: false
 }
 
-
-
-//Desenhar a nave
-
+//Desenhar a nave no canvas
 function drawShip() {
     ctx.save();
     ctx.translate(ship.coordinates.x, ship.coordinates.y)
@@ -392,6 +346,8 @@ function drawShip() {
 
     if (ship.isMoving) {
         ship.img.src = shipMovingSrc
+
+        //Aceleração da nave
         if (ship.velocity < ship.maxVelocity) {
             ship.velocity += 0.1
             ship.coordinates.y += ship.velocity * Math.sin(ship.angle - Math.PI / 2)
@@ -401,25 +357,22 @@ function drawShip() {
             ship.coordinates.y += ship.velocity * Math.sin(ship.angle - Math.PI / 2)
             ship.coordinates.x += ship.velocity * Math.cos(ship.angle - Math.PI / 2)
         }
-
     } else {
         ship.img.src = shipSrc
         if (ship.velocity == 0) {
             ship.velocity = 0
         }
-
         if (ship.velocity > 0) {
             ship.velocity -= 0.05
             ship.coordinates.y += ship.velocity * Math.sin(ship.angle - Math.PI / 2)
             ship.coordinates.x += ship.velocity * Math.cos(ship.angle - Math.PI / 2)
         }
     }
-   /*  Viragens criadas atraves de angulos */
-
+   
+    //Mudança do angulo da nave ao virar
     if (ship.isTurningLeft) {
         ship.angle -= 0.1
     }
-
     if (ship.isTurningRigth) {
         ship.angle += 0.1
     }
@@ -439,8 +392,7 @@ function drawShip() {
     }
 }
 
-/* Criação de explosão */
-
+//Criação da explosão
 let explosion = {
     img: new Image(),
     size: 150,
@@ -453,24 +405,22 @@ let explosion = {
 }
 explosion.img.src = "./img/explosion.png"
 
-
+//Desenhar a explosão no canvas
 function drawExplosion() {
     if (explosion.isExploding == true) {
-
         ctx.save()
         ctx.translate(explosion.coordinates.x, explosion.coordinates.y)
         ctx.rotate(explosion.angle)
         ctx.drawImage(explosion.img, -explosion.size / 2, -explosion.size / 2, explosion.size, explosion.size)
         ctx.restore()
 
+        //Sistema de animação. Optamos por usar uma imagem como explosão e rodar a mesma 180 graus a cada 50ms
         setTimeout(() => {
             explosion.angle = 180
         }, 50)
-
         setTimeout(() => {
             explosion.angle = 0
         }, 100)
-
         setTimeout(() => {
             explosion.isExploding = false
         }, 150);
@@ -482,33 +432,35 @@ function drawExplosion() {
 //Explosão da nave
 function explodeShip() {
     for (let i = 0; i < asteroids.length; i++) {
-        //
+        
+        //Colisão entre a nave e os asteroids
         if (distanceBetweenTwoPoints(ship.coordinates.x, ship.coordinates.y, asteroids[i].coordinates.x, asteroids[i].coordinates.y) < ship.size / 4 + asteroids[i].size / 2) {
+            explosion.isExploding = true
             explosion.coordinates.x = ship.coordinates.x
             explosion.coordinates.y = ship.coordinates.y
-            explosion.isExploding = true
+
+            //Ao bater contra um asteroid, se houver algum que esteja dentro de um raio de 300px do centro, este vai ser removido.(Vai ser criado outro automaticamente)
+            for (let j = 0; j < asteroids.length; j++) {
+                if (distanceBetweenTwoPoints(asteroids[j].coordinates.x, asteroids[j].coordinates.y, canvas.width / 2, canvas.height / 2) < 300) {
+                    asteroids.splice(j, 1)
+                }
+            }
+
             if (lives == 1) {
                 lives = 0
                 isGameOver = true
-
-            } else {
-                //Ao bater contra um asteroid, se houver algum que esteja dentro de um raio de 300px do centro, este vai ser removido.(Vai ser criado outro automaticamente)
-                if (distanceBetweenTwoPoints(asteroids[i].coordinates.x, asteroids[i].coordinates.y, canvas.width / 2, canvas.height / 2) < 300) {
-                    asteroids.splice(i, 1)
-                    
-                }
+            }
+            if (lives > 0) {
+                lives -= 1
                 ship.velocity = 0
                 ship.coordinates.x = canvas.width / 2
                 ship.coordinates.y = canvas.height / 2
                 drawShip()
-                
-                if (lives > 0) {
-                    lives -= 1
-                }
             }
         }
     }
 
+    //Colisão entre a nave e o alien
     if (aliens[0].isAlive) {
         if (distanceBetweenTwoPoints(ship.coordinates.x, ship.coordinates.y, aliens[0].coordinates.x, aliens[0].coordinates.y) < ship.size / 4 + aliens[0].size / 2) {
             if (lives == 1) {
@@ -520,6 +472,13 @@ function explodeShip() {
                 aliens[0].isAlive = false;
             }
 
+            //Ao bater contra um alien, se houver algum asteroid que esteja dentro de um raio de 300px do centro, este vai ser removido.(Vai ser criado outro automaticamente)
+            for (let j = 0; j < asteroids.length; j++) {
+                if (distanceBetweenTwoPoints(asteroids[j].coordinates.x, asteroids[j].coordinates.y, canvas.width / 2, canvas.height / 2) < 300) {
+                    asteroids.splice(j, 1)
+                }
+            }
+
             ship.velocity = 0
             ship.coordinates.x = canvas.width / 2
             ship.coordinates.y = canvas.height / 2
@@ -529,13 +488,10 @@ function explodeShip() {
             }
         }
     }
-    
 }
-
 
 //Jogo terminado
 function gameOver() {
-
     if (isGameOver) {
         if (score > localStorage.getItem("HighScore")) {
             localStorage.setItem("HighScore", score)
@@ -546,8 +502,13 @@ function gameOver() {
     }
 }
 
+//Fechar Pagina 
+function quit() {
+    window.close()
+}
 
-//Voltar a jogar
+//Voltar a jogar 
+//Reset ao jogo inteiro
 function startAgain() {
     isGameOver = false
     scoreAlien = 1
@@ -565,18 +526,15 @@ function startAgain() {
     render()
 }
 
-
-//Voltar ao Menu (Reload)
+//Voltar ao Menu (Reload á pagina)
 function reload() {
     window.location.reload()
 }
-
 
 //Calcular a distância entre dois pontos
 function distanceBetweenTwoPoints(x1, y1, x2, y2) {
     return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2))
 }
-
 
 //Criação do objeto das balas ao clicar para disparar
 function shoot() {
@@ -594,10 +552,7 @@ function shoot() {
         drawBullets()
     }
     ship.isShooting = false
-
 }
-
-
 
 //Desenhar as balas no canvas
 function drawBullets() {
@@ -622,17 +577,14 @@ function drawBullets() {
             ctx.arc(bullets[i].coordinates.x, bullets[i].coordinates.y, bullets[i].size / 2, 0, 2 * Math.PI);
             ctx.fillStyle = "orange"
             ctx.fill()
-            // ctx.translate(, )
-            // ctx.rotate(bullets[i].angle)
-            // ctx.drawImage(bullets[i].img, -bullets[i].size / 2, -ship.size / 2, bullets[i].size, bullets[i].size)
             bullets[i].coordinates.y += bullets[i].velocity * Math.sin(bullets[i].angle - Math.PI / 2)
             bullets[i].coordinates.x += bullets[i].velocity * Math.cos(bullets[i].angle - Math.PI / 2)
-            // ctx.restore()
             ctx.closePath()
 
-
+            //Index da bala que vai ser removida
             let idxFound = null
 
+            //Colisão entre as balas e os asteroids
             for (let j = 0; j < asteroids.length; j++) {
                 //Se a bala bater no asteroid, este vai ser removido do array
                 if (distanceBetweenTwoPoints(bullets[i].coordinates.x, bullets[i].coordinates.y, asteroids[j].coordinates.x, asteroids[j].coordinates.y) < bullets[i].size / 4 + asteroids[j].size / 2) {
@@ -646,7 +598,7 @@ function drawBullets() {
                     break
                 }
             }
-
+            //Colisão entre as balas e o alien
             if (aliens[0].isAlive) {
                 if (distanceBetweenTwoPoints(bullets[i].coordinates.x, bullets[i].coordinates.y, aliens[0].coordinates.x, aliens[0].coordinates.y) < bullets[i].size / 4 + aliens[0].size / 2) {
                     // aliens.splice(0, 1)
@@ -658,11 +610,13 @@ function drawBullets() {
                     break
                 }
             }
-
+            
+            //Fazer as balas desaparecerem passados 2s
             if (new Date().getTime() - bullets[i].date.getTime() > 2000) {
                 idxFound = i
             }
 
+            //Vai buscar o index e remove a bala correspondente
             if (idxFound != null) {
                 bullets.splice(idxFound, 1)
             }
@@ -670,7 +624,7 @@ function drawBullets() {
     }
 }
 
-
+//Key Press
 function KeyPressed(e) {
     if (e.keyCode == 32 && canShoot == true) {
         ship.isShooting = true
@@ -693,6 +647,7 @@ function KeyPressed(e) {
     }
 }
 
+//Key Release
 function KeyReleased(e) {
     if (e.key == "w" || e.key == "W") {
         ship.img.src = shipSrc
@@ -706,15 +661,13 @@ function KeyReleased(e) {
     }
     if (e.keyCode == 32) {
         ship.isShooting = false
-        shootingSound.stop()
     }
 }
-
 window.addEventListener('keydown', KeyPressed);
 window.addEventListener('keyup', KeyReleased)
 
-//Script direção aleatória para os asteroids
-function randomDirection(min, max) {
+//Retorna um numero aleatório 
+function randomNumberBetween(min, max) {
     return Math.random() * (max - min) + min;
 }
 
@@ -722,11 +675,9 @@ function randomDirection(min, max) {
 function getRandomX() {
     return Math.random() * (canvas.width - rndSize)
 }
-
 function getRandomY() {
     return Math.random() * (canvas.height - rndSize)
 }
-
 
 //HighScore
 function setHighScore() {
@@ -736,8 +687,9 @@ function setHighScore() {
     document.querySelector("#highScoreValue").innerHTML = "High Score: " + highScore
 }
 
-/* Funções que permitem ao carrosel funcionar */
 
+
+//                                              Funções responsaveis pelo menu
 
 let slideIndex = 1;
 showSlides(slideIndex);
@@ -764,17 +716,9 @@ function showSlides(n) {
         slides[i].style.display = "none";
     }
     slides[slideIndex - 1].style.display = "block";
-
 }
 
-//Fechar Pagina 
-function quit() {
-    window.close()
-}
-
-/* 
-Função abrir o menu options */
-
+//Função que abre o menu Options
 function functionModal() {
 
     document.getElementById('optionsButton').addEventListener('click', (e) => {
@@ -788,18 +732,20 @@ function functionModal() {
     })
 }
 
-
-/* Função para alterar o volume da musica */
-function changeMusicVolume(musicVolume) {
-    console.log(musicVolume)
-
+// Função para alterar o volume da musica 
+function changeMusicVolume(volume) {
+    initialMusic.volume = volume * 0.01
 }
 
+// Função para alterar o volume dos efeitos sonoros
+function changeSoundVolume(volume) {
+    explosionSound.volume= volume * 0.01
+    shootingSound.volume= volume * 0.01
+}
 
 
 //render
 function render() {
-
 
     //Colocar o highscore
     setHighScore()
@@ -843,6 +789,7 @@ function render() {
     //Desenhar a animação da explosão no canvas
     drawExplosion()
 
+    //Se o utilizador perder, o render para
     if (!isGameOver) {
         requestAnimationFrame(render)
     }
