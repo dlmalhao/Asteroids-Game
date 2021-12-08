@@ -436,6 +436,7 @@ function explodeShip() {
         //Colisão entre a nave e os asteroids
         if (distanceBetweenTwoPoints(ship.coordinates.x, ship.coordinates.y, asteroids[i].coordinates.x, asteroids[i].coordinates.y) < ship.size / 4 + asteroids[i].size / 2) {
             explosion.isExploding = true
+            explosionSound.play()
             explosion.coordinates.x = ship.coordinates.x
             explosion.coordinates.y = ship.coordinates.y
 
