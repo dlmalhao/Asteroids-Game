@@ -479,6 +479,9 @@ function explodeShip() {
                 }
             }
 
+            explosion.isExploding = true
+            explosion.coordinates.x = aliens[0].coordinates.x
+            explosion.coordinates.y = aliens[0].coordinates.y
             ship.velocity = 0
             ship.coordinates.x = canvas.width / 2
             ship.coordinates.y = canvas.height / 2
@@ -601,7 +604,9 @@ function drawBullets() {
             //Colisão entre as balas e o alien
             if (aliens[0].isAlive) {
                 if (distanceBetweenTwoPoints(bullets[i].coordinates.x, bullets[i].coordinates.y, aliens[0].coordinates.x, aliens[0].coordinates.y) < bullets[i].size / 4 + aliens[0].size / 2) {
-                    // aliens.splice(0, 1)
+                    explosion.isExploding = true
+                    explosion.coordinates.x = aliens[0].coordinates.x
+                    explosion.coordinates.y = aliens[0].coordinates.y
                     bullets.splice(i, 1)
                     idxFound = i
                     aliens[0].isAlive = false
