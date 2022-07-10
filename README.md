@@ -1,1 +1,1 @@
-# Asteroids-Game
+# Asteroids Game - College Project
